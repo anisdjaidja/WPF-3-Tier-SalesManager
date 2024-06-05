@@ -25,8 +25,8 @@ namespace WPF_N_Tier_Test
             _AppConfig = new();
             _AppConfig.load();
 
-            SalesContext dbContext = new SalesContext(new DbContextOptionsBuilder().UseSqlServer().Options);
-            appWindowViewModel = new AppWindowViewModel();
+            SalesContext dbContext = new SalesContext(new DbContextOptionsBuilder().UseSqlServer(_AppConfig.DbConnectionString).Options);
+            appWindowViewModel = new AppWindowViewModel(dbContext);
             MainWindow mainWindow = new MainWindow(_AppConfig, globalMessageStore, appWindowViewModel);
             Current.MainWindow = mainWindow;
             mainWindow.Show();

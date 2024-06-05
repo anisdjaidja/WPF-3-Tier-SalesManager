@@ -4,6 +4,7 @@ using WPF_N_Tier_Test.Service;
 using WPF_N_Tier_Test.View.Sales;
 using WPF_N_Tier_Test.ViewModel.Navigation;
 using WPF_N_Tier_Test.ViewModel.Sales;
+using WPF_N_Tier_Test_Data_Access.DataAccess;
 
 
 namespace WPF_N_Tier_Test.ViewModel.App
@@ -25,11 +26,14 @@ namespace WPF_N_Tier_Test.ViewModel.App
         CustomerService clientsService;
         StockService stockService;
 
+        public SalesContext DbContext { get; }
+
         #endregion
 
         #endregion
-        public AppWindowViewModel()
+        public AppWindowViewModel(SalesContext dbContext)
         {
+            this.DbContext = dbContext;
             ResolveDependencies();
             
         }
@@ -55,8 +59,8 @@ namespace WPF_N_Tier_Test.ViewModel.App
         void ResolveServices()
         {
             //var app = Application.Current as WPF_N_Tier_Test.App;
-            clientsService = new();
-            stockService = new();
+            clientsService = new(DbContext);
+            stockService = new(DbContext);
             //supplyService = new(DBclient);
             //memberService = new(DBclient);
             //subscriptionPlansService = new(DBclient!.GetDatabase(app._AppConfig.DbName));

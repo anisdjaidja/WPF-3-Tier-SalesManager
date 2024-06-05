@@ -1,8 +1,14 @@
-﻿namespace WPF_N_Tier_Test_Data_Access.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WPF_N_Tier_Test_Data_Access.DTOs
 {
     public class TransactionBatch: ITransactionBatch
     {
+        [Key]
+        public int Id { get; set; }
         public int ProductId { get; set; }
+        [Required]
+        public Product Article { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public int Category { get; set; } = 0;
         public string Model { get; set; } = string.Empty;

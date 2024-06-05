@@ -11,9 +11,13 @@ namespace WPF_N_Tier_Test
     {
         //public const string DbConnectionString = "mongodb+srv://tajirdev:tajirtajir0a@basictajircluster.yrgpzez.mongodb.net/?retryWrites=true&w=majority";
         //public const string DbConnectionString = "mongodb+srv://tajirdev:tajirtajir0a@basictajircluster.yrgpzez.mongodb.net/";
-        public string ServerUrl = "localhost:27017";
+        //public string ServerUrl = "localhost:27017";
+        //public string DbConnectionString {
+        //    get { return $"mongodb://{ServerUrl}/"; }
+        //}
+        public const string dbName = "NTierTestDB";
         public string DbConnectionString {
-            get { return $"mongodb://{ServerUrl}/"; }
+            get { return @$"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog={dbName};Integrated Security=True;"; }
         }
         public string DbName = "WPF_N_Tier_TestDocDB";
         private string FilePath = DirectorySurfer.GetAppConfig();

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using WPF_N_Tier_Test_Data_Access.DTOs;
 
 namespace WPF_N_Tier_Test_Data_Access.DataAccess
 {
-     public class SalesContext : DbContext
+    public class SalesContext : DbContext
     {
         public SalesContext(DbContextOptions options) : base(options)
         {

@@ -1,9 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace WPF_N_Tier_Test_Data_Access.DTOs
 {
     public class Person
     {
-
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; } = string.Empty;

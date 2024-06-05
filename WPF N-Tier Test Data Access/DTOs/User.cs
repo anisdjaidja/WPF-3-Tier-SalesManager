@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WPF_N_Tier_Test_Data_Access.DTOs
 {
-    public class User: Person
+    public class User
     {
+        [Key]
+        public string ID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
     }

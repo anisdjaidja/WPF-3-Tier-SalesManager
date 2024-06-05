@@ -35,10 +35,10 @@ namespace WPF_N_Tier_Test.ViewModel.Sales
         {
             Pages = new()
             {
+                null,
+                null,
                 new CustomersPage(CustomersVM),
-                null,
-                null,
-                null,
+                new PointOfSaleView(PointOfSaleVM),
                 null,
             };
             SwitchPage(0);

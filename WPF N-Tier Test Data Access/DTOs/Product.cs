@@ -1,9 +1,12 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations;
+
 namespace WPF_N_Tier_Test_Data_Access.DTOs
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; } = 0;
 
         public string Name { get; set; } = string.Empty;

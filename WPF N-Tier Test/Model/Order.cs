@@ -5,15 +5,29 @@ namespace WPF_N_Tier_Test.Model
     public class Order : WPF_N_Tier_Test_Data_Access.DTOs.Transaction<ProductBatch>
     {
         public Customer Customer { get; set; }
-        public override string TransactionID
+
+        public event EventHandler<bool>? TransactionFeaturesChanged;
+        protected virtual void OnRiseTransactionFeaturesChanged(bool e)
+        {
+            // copy to avoid race condition
+            EventHandler<bool> handler = TransactionFeaturesChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+        public string TransactionID
         {
             get { return 'O' + '-' + Customer.Id + DateTime.ToString("ddMMyy") + ID; }
         }
         public Order() : base()
         {
             IsPaid = false;
+            DateTime = DateTime.Now;
+            TransactedEntities = new();
+            TransactedEntities.CollectionChanged += (s, o) => OnRiseTransactionFeaturesChanged(true);
         }
-        public override string State
+        public string State
         {
             get
             {
