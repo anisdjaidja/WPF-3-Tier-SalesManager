@@ -1,0 +1,71 @@
+﻿<UserControl
+  x:Class="WPF_N_Tier_Test.View.App.SearchBarView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:local="clr-namespace:WPF_N_Tier_Test.View.App"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  x:Name="searchBar"
+  Height="32"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <Border Background="{DynamicResource MainSpaceLighter2}" CornerRadius="3">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="auto" />
+        <ColumnDefinition Width="auto" />
+      </Grid.ColumnDefinitions>
+
+      <TextBox
+        x:Name="SearchBox"
+        Margin="5,0"
+        FontSize="15"
+        Style="{StaticResource LongTextBoxStandard}"
+        Tag="{DynamicResource Search for a product a client or a shipper}"
+        Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" />
+      <Popup
+        Name="DropPopup"
+        HorizontalAlignment="Center"
+        AllowsTransparency="True"
+        HorizontalOffset="-5"
+        IsOpen="False"
+        Placement="Bottom"
+        PlacementTarget="{Binding ElementName=searchBar}"
+        PopupAnimation="None"
+        StaysOpen="False">
+        <Border x:Name="DropDownBorder" Background="Transparent">
+          <local:SearchDropDownView DataContext="{Binding DropDownVM}" />
+          <Border.RenderTransform>
+            <TranslateTransform x:Name="OpsTransform" />
+          </Border.RenderTransform>
+        </Border>
+      </Popup>
+      <Button
+        x:Name="FilterSearch"
+        Grid.Column="1"
+        Height="25"
+        HorizontalAlignment="Center"
+        Style="{StaticResource ActionBtnNoBorder}"
+        ToolTip="Search by ID: Off">
+        <Button.Content>
+          <Image Source="/Assets/Tools/Filter2.png" />
+        </Button.Content>
+      </Button>
+      <Button
+        x:Name="SearchBtn"
+        Grid.Column="2"
+        Width="35"
+        Height="35"
+        HorizontalAlignment="Center"
+        Style="{StaticResource ActionBtnNoBorder}">
+        <Button.Content>
+          <Image Width="30" Source="/Assets/Tools/Search.png" />
+        </Button.Content>
+      </Button>
+
+    </Grid>
+  </Border>
+
+</UserControl>

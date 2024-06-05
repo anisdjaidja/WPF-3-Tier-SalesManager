@@ -1,0 +1,169 @@
+﻿<UserControl
+  x:Class="WPF_N_Tier_Test.View.Navigation.NavigationSideBarView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converters="clr-namespace:WPF_N_Tier_Test.Common.Converters"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:local="clr-namespace:WPF_N_Tier_Test.View.Navigation"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  d:DesignHeight="700"
+  d:DesignWidth="80"
+  Background="{DynamicResource MainSpace}"
+  mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style BasedOn="{StaticResource NavBriefToolTipStyle}" TargetType="ToolTip" />
+    <converters:RadioBoolToIntConverter x:Key="RadioValue" />
+  </UserControl.Resources>
+  <Grid>
+    <StackPanel
+      x:Name="SideMenu"
+      Grid.Row="1"
+      Margin="0,1"
+      VerticalAlignment="Top">
+
+      <RadioButton
+        x:Name="Home_btn"
+        GroupName="NavigationMenuGroup"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="{DynamicResource Dashboard}">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding NavigateToPageCommand}" CommandParameter="0" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <RadioButton.Background>
+          <ImageBrush ImageSource="/Assets/Nav/Home.png" Stretch="Uniform">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+      </RadioButton>
+
+      <RadioButton
+        x:Name="Register_btn"
+        GroupName="NavigationMenuGroup"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="{DynamicResource Patients}">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding NavigateToPageCommand}" CommandParameter="1" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <RadioButton.Background>
+          <ImageBrush ImageSource="/Assets/Tools/People.png" Stretch="Uniform">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+      </RadioButton>
+
+      <RadioButton
+        x:Name="InventoryBtn"
+        GroupName="NavigationMenuGroup"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="{DynamicResource Medicine cat}"
+        ToolTipService.BetweenShowDelay="0"
+        ToolTipService.HorizontalOffset="5"
+        ToolTipService.InitialShowDelay="2000"
+        ToolTipService.VerticalOffset="-5">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding NavigateToPageCommand}" CommandParameter="2" />
+          </i:EventTrigger>
+          <i:EventTrigger EventName="ToolTipOpening">
+            <i:InvokeCommandAction Command="{Binding LoadInventoryBriefCommand}" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <RadioButton.Background>
+          <ImageBrush ImageSource="/Assets/Tools/shelf.png" Stretch="Uniform">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+      </RadioButton>
+
+
+      <RadioButton
+        x:Name="Management_btn"
+        GroupName="NavigationMenuGroup"
+        IsEnabled="False"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="{DynamicResource Business Charges}">
+        <RadioButton.Background>
+          <ImageBrush
+            ImageSource="/Assets/Tools/Money.png"
+            Stretch="Uniform"
+            TileMode="None">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding NavigateToPageCommand}" CommandParameter="3" />
+          </i:EventTrigger>
+          <i:EventTrigger EventName="ToolTipOpening">
+            <i:InvokeCommandAction Command="{Binding LoadCustomersBriefCommand}" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+      </RadioButton>
+
+      <RadioButton
+        x:Name="Tools_btn"
+        GroupName="NavigationMenuGroup"
+        IsEnabled="False"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="Inventory">
+        <RadioButton.Background>
+          <ImageBrush
+            ImageSource="/Assets/Tools/Calculator.png"
+            Stretch="Uniform"
+            TileMode="None">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+      </RadioButton>
+
+      <RadioButton
+        x:Name="StaffBtn"
+        GroupName="NavigationMenuGroup"
+        IsEnabled="False"
+        Style="{StaticResource Menu_Btn_Theme}"
+        ToolTip="Inventory">
+        <RadioButton.Background>
+          <ImageBrush
+            ImageSource="/Assets/Tools/staff.png"
+            Stretch="Uniform"
+            TileMode="None">
+            <ImageBrush.RelativeTransform>
+              <TransformGroup>
+                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="0.35" ScaleY="0.35" />
+              </TransformGroup>
+            </ImageBrush.RelativeTransform>
+          </ImageBrush>
+        </RadioButton.Background>
+      </RadioButton>
+
+    </StackPanel>
+
+
+
+  </Grid>
+</UserControl>

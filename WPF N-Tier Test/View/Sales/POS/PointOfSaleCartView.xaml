@@ -1,0 +1,296 @@
+﻿<UserControl
+  x:Class="WPF_N_Tier_Test.View.Sales.POS.PointOfSaleCartView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:WPF_N_Tier_Test.View.Sales.POS"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  d:DesignHeight="600"
+  d:DesignWidth="450"
+  mc:Ignorable="d">
+  <Border
+    x:Name="BucketContainer"
+    Grid.RowSpan="3"
+    Grid.Column="1"
+    Padding="25,15"
+    HorizontalAlignment="Stretch"
+    Background="{DynamicResource MainSpaceLighter2}"
+    BorderBrush="Transparent"
+    BorderThickness="0">
+    <Grid x:Name="BucketGrid">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
+        <RowDefinition />
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
+
+        <RowDefinition Height="auto" />
+      </Grid.RowDefinitions>
+      <StackPanel Orientation="Horizontal">
+
+        <Image
+          Width="25"
+          Margin="5,0"
+          Source="/Assets/Tools/shelf.png" />
+        <TextBlock
+          Margin="5,0,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Center"
+          FontSize="16"
+          Foreground="Black"
+          Text="{DynamicResource Bucket}" />
+
+      </StackPanel>
+
+      <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+        <Button
+          x:Name="NewSaleBtn"
+          Margin="5,0"
+          Padding="7,0"
+          Style="{StaticResource ActionBtnNoBorder}"
+          ToolTip="Create new empty sale">
+          <Button.Content>
+            <Image
+              Width="17"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center"
+              Source="/Assets/Tools/trash.png" />
+          </Button.Content>
+        </Button>
+      </StackPanel>
+      <Grid
+        Grid.Row="3"
+        Height="160"
+        Margin="0">
+        <Grid.Resources>
+          <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{DynamicResource CellSelectionFont}" />
+          </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="80" />
+          <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="7*" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Image
+          Grid.RowSpan="2"
+          Grid.Column="1"
+          Source="/Assets/Tools/Ticket.png"
+          Stretch="Fill" />
+        <Grid
+          Grid.Column="1"
+          Margin="20,0"
+          VerticalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+          </Grid.RowDefinitions>
+          <Label
+            Grid.Row="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="Discount"
+            FontWeight="Light" />
+          <Label
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="{DynamicResource SubTotal}"
+            FontWeight="Light" />
+          <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="%"
+            FontWeight="Light" />
+          <TextBox
+            Name="DiscountAmount"
+            Grid.Row="2"
+            Grid.Column="1"
+            MinWidth="40"
+            HorizontalAlignment="Right"
+            AutoWordSelection="True"
+            FontSize="13"
+            FontWeight="Bold"
+            MaxLines="1"
+            Style="{StaticResource LongTextBox}"
+            Text="0" />
+          <Label
+            Name="TotalHt"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Content="0.00"
+            FontSize="13"
+            FontWeight="Bold" />
+
+        </Grid>
+
+        <Grid
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="20,0"
+          VerticalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Label
+            HorizontalAlignment="Left"
+            Content="{DynamicResource Total}"
+            FontSize="16" />
+          <Label
+            Name="TotalLable"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Content="0.00"
+            FontSize="16"
+            FontWeight="Bold" />
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Row="6">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Button
+          x:Name="SellBtn"
+          Grid.Column="1"
+          Height="45"
+          Padding="10,0"
+          HorizontalAlignment="Stretch"
+          IsEnabled="True"
+          Style="{StaticResource Btn_Theme2}"
+          ToolTip="Confirm Sale">
+          <Button.Content>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Image
+                Width="30"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Source="/Assets/Tools/SpaceBar.png" />
+              <TextBlock
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="18"
+                FontWeight="Medium"
+                Text="{DynamicResource Checkout}"
+                TextAlignment="Center" />
+            </Grid>
+
+          </Button.Content>
+        </Button>
+        <Button
+          x:Name="PayBtn"
+          Height="45"
+          HorizontalAlignment="Stretch"
+          IsEnabled="False"
+          Style="{StaticResource ActionBtn}"
+          ToolTip="Print payment ticket">
+          <Button.Content>
+
+            <Grid Height="40">
+              <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="18"
+                FontWeight="Medium"
+                Text="{DynamicResource Pay}" />
+              <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontSize="8"
+                FontWeight="Bold"
+                Foreground="{DynamicResource Separator}"
+                Text="Enter" />
+            </Grid>
+
+          </Button.Content>
+        </Button>
+        <Popup
+          Name="TicketPopup"
+          AllowsTransparency="True"
+          IsOpen="False"
+          Placement="Left"
+          PlacementTarget="{Binding ElementName=PayBtn}"
+          StaysOpen="False">
+          <Border
+            x:Name="TicketBorder"
+            Height="400"
+            Padding="5"
+            HorizontalAlignment="Stretch"
+            Background="{DynamicResource MainSpaceLighter2}"
+            BorderBrush="{DynamicResource Separator}"
+            BorderThickness="1"
+            CornerRadius="5">
+            <Border.RenderTransform>
+              <TranslateTransform />
+            </Border.RenderTransform>
+          </Border>
+        </Popup>
+      </Grid>
+
+      <Border
+        x:Name="SaleBucketContainer"
+        Grid.Row="2"
+        Margin="0,5,0,5"
+        HorizontalAlignment="Stretch"
+        Background="{DynamicResource MainSpaceLighter1}"
+        BorderBrush="{DynamicResource Separator}"
+        BorderThickness="0.5"
+        CornerRadius="5">
+        <DataGrid
+          x:Name="SaleBucketTable"
+          HorizontalAlignment="Stretch"
+          HorizontalContentAlignment="Stretch"
+          AutoGeneratingColumn="GeneratingColumns"
+          BorderThickness="0"
+          CanUserResizeRows="False"
+          FontSize="14"
+          IsReadOnly="True"
+          SelectionMode="Extended"
+          Style="{StaticResource DataGridStyleAlt}" />
+      </Border>
+
+      <Popup
+        Name="QtyPickerPopup"
+        AllowsTransparency="True"
+        IsOpen="False"
+        Placement="Center"
+        PlacementTarget="{Binding ElementName=SaleBucketTable}"
+        StaysOpen="True">
+        <Border
+          x:Name="QtyPickerBorder"
+          Padding="5"
+          HorizontalAlignment="Stretch"
+          Background="{DynamicResource MainSpaceLighter2}"
+          BorderBrush="{DynamicResource Separator}"
+          BorderThickness="0.5"
+          CornerRadius="5">
+          <Border.RenderTransform>
+            <TranslateTransform />
+          </Border.RenderTransform>
+        </Border>
+      </Popup>
+    </Grid>
+  </Border>
+</UserControl>

@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Style
+    x:Key="OptionRadioBtnTheme"
+    BasedOn="{StaticResource {x:Type ToggleButton}}"
+    TargetType="{x:Type RadioButton}">
+
+    <Style.Setters>
+      <Setter Property="MinHeight" Value="1" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="RadioButton">
+            <Border
+              x:Name="bk"
+              Background="{Binding BtnColor}"
+              BorderBrush="Transparent"
+              CornerRadius="2">
+              <Grid x:Name="grid" Background="{TemplateBinding Background}">
+                <TextBlock
+                  x:Name="txt"
+                  Margin="0,0,0,8"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Bottom"
+                  FontSize="12"
+                  Text="{TemplateBinding Content}" />
+              </Grid>
+
+            </Border>
+
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bk" Property="Background" Value="#335A5ED1" />
+              </Trigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="txt" Property="Foreground" Value="#005F8C" />
+                <Setter TargetName="bk" Property="Background" Value="#4C005F8C" />
+              </Trigger>
+
+            </ControlTemplate.Triggers>
+
+
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+
+    </Style.Setters>
+
+
+  </Style>
+
+</ResourceDictionary>

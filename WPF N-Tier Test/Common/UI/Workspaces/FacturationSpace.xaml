@@ -1,0 +1,352 @@
+﻿<UserControl
+  x:Class="WPF_N_Tier_Test.Common.UI.Workspaces.FacturationSpace"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:WPF_N_Tier_Test.Common.UI.Workspaces"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  d:Height="800"
+  d:Width="1200"
+  Background="{DynamicResource MainSpaceDarker}"
+  FontFamily="{DynamicResource MainFontFamily}"
+  mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style TargetType="Label">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style BasedOn="{StaticResource Btn_Theme}" TargetType="Button" />
+    <Style BasedOn="{StaticResource LongTextBox}" TargetType="TextBox">
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Height" Value="45" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Margin" Value="4" />
+      <Setter Property="AcceptsReturn" Value="True" />
+    </Style>
+    <Style BasedOn="{StaticResource ComboBoxEx}" TargetType="ComboBox" />
+  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="0" />
+      <ColumnDefinition Width="3*" />
+      <ColumnDefinition Width="300" />
+      <ColumnDefinition Width="auto" />
+    </Grid.ColumnDefinitions>
+
+    <Border
+      Grid.Column="2"
+      Margin="10"
+      Padding="10"
+      VerticalAlignment="Top"
+      Background="{DynamicResource MainSpaceLighter1}"
+      CornerRadius="5">
+      <StackPanel HorizontalAlignment="Stretch">
+        <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+          <Image Width="30" Source="/assets/tools/text.png" />
+          <Label Content="{DynamicResource Add text}" FontSize="16" />
+
+        </StackPanel>
+        <TextBox
+          x:Name="SubtitleBox"
+          Tag="{DynamicResource Subtitle}"
+          TextChanged="SubtitleBox_TextChanged" />
+        <TextBox
+          x:Name="OpeningStatementBox"
+          MinHeight="100"
+          Margin="4"
+          Style="{StaticResource LongTextBoxMultiLiner}"
+          Tag="{DynamicResource Opening statement}"
+          TextChanged="Statement_TextChanged" />
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
+          <TextBox
+            x:Name="ClosingStatementBox"
+            MinHeight="100"
+            Margin="4"
+            Style="{StaticResource LongTextBoxMultiLiner}"
+            Tag="{DynamicResource Closing statement}"
+            TextChanged="Statement_TextChanged" />
+          <Button
+            x:Name="GenerateDigitWords"
+            Grid.Column="1"
+            Width="80"
+            Height="60"
+            Margin="5"
+            VerticalAlignment="Top"
+            Click="GenerateDigitWords_Click"
+            IsEnabled="False"
+            Style="{StaticResource ActionBtn}">
+            <Button.Content>
+              <StackPanel>
+
+                <TextBlock
+                  Margin="10,5"
+                  VerticalAlignment="Center"
+                  Text="{DynamicResource Generate}" />
+                <Image
+                  Height="20"
+                  VerticalAlignment="Center"
+                  Source="/Assets/Tools/currency.png" />
+              </StackPanel>
+            </Button.Content>
+          </Button>
+        </Grid>
+        <TextBox
+          x:Name="SignatureParty1"
+          Tag="{DynamicResource Party}"
+          TextChanged="Party_TextChanged" />
+        <TextBox
+          x:Name="SignatureParty2"
+          Tag="{DynamicResource Party}"
+          TextChanged="Party_TextChanged" />
+      </StackPanel>
+    </Border>
+    <Border
+      Grid.Column="3"
+      Margin="10"
+      Padding="10"
+      VerticalAlignment="Top"
+      Background="{DynamicResource MainSpaceLighter1}"
+      CornerRadius="5">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+          <Image Width="30" Source="/assets/tools/documentsettings.png" />
+          <Label Content="{DynamicResource Options}" FontSize="16" />
+
+        </StackPanel>
+        <CheckBox
+          x:Name="DateCB"
+          Margin="10"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          Checked="DateCB_Checked"
+          Content="{DynamicResource Date}"
+          FontSize="14"
+          IsChecked="True"
+          Unchecked="DateCB_Checked" />
+        <CheckBox
+          x:Name="NumberingCB"
+          Margin="10"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          Checked="TableOptionsChanged"
+          Content="{DynamicResource Item numbering}"
+          FontSize="14"
+          IsChecked="True"
+          Unchecked="TableOptionsChanged" />
+        <CheckBox
+          x:Name="AgeCB"
+          Margin="10"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          Checked="AgeCB_Unchecked"
+          Content="{DynamicResource Age}"
+          FontSize="14"
+          IsChecked="True"
+          Unchecked="AgeCB_Unchecked" />
+        <CheckBox
+          x:Name="GenderCB"
+          Margin="10"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          Checked="GenderCBCB_Checked"
+          Content="{DynamicResource Gendre}"
+          FontSize="14"
+          IsChecked="True"
+          Unchecked="GenderCBCB_Checked" />
+        <CheckBox
+          x:Name="MetricCB"
+          Margin="10"
+          VerticalAlignment="Center"
+          VerticalContentAlignment="Center"
+          Checked="TableOptionsChanged"
+          Content="{DynamicResource Item metric}"
+          FontSize="14"
+          IsChecked="False"
+          Unchecked="TableOptionsChanged" />
+      </StackPanel>
+    </Border>
+    <Border
+      Grid.Column="2"
+      Grid.ColumnSpan="2"
+      Margin="10"
+      VerticalAlignment="Bottom"
+      Background="{DynamicResource MainSpaceLighter1}"
+      CornerRadius="5">
+      <StackPanel
+        Grid.Column="3"
+        Margin="10"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom"
+        Orientation="Horizontal">
+        <Button
+          x:Name="ExportPDF"
+          Height="40"
+          Margin="5"
+          Click="ExportPDF_Click"
+          Style="{StaticResource ActionBtn}">
+          <Button.Content>
+            <StackPanel Orientation="Horizontal">
+              <Image
+                Height="30"
+                VerticalAlignment="Center"
+                Source="/Assets/Tools/FilePDF.png" />
+              <TextBlock
+                Margin="10,0"
+                VerticalAlignment="Center"
+                Text="Export PDF" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
+        <Button
+          x:Name="ExportXps"
+          Height="40"
+          Margin="5"
+          Click="ExportXps_Click"
+          Style="{StaticResource ActionBtn}">
+          <Button.Content>
+            <StackPanel Orientation="Horizontal">
+              <Image
+                Height="30"
+                VerticalAlignment="Center"
+                Source="/Assets/Tools/FileXPS.png" />
+              <TextBlock
+                Margin="10,0"
+                VerticalAlignment="Center"
+                Text="Export XPS" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
+        <Button
+          x:Name="Print"
+          Width="200"
+          Height="45"
+          Margin="5"
+          Click="Print_Click"
+          Style="{StaticResource Btn_Theme2}">
+          <Button.Content>
+            <StackPanel Orientation="Horizontal">
+              <Image
+                Height="35"
+                VerticalAlignment="Center"
+                Source="/Assets/Tools/Printer.png" />
+              <TextBlock
+                Margin="20,0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Text="{DynamicResource Print}" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
+
+      </StackPanel>
+    </Border>
+
+
+
+
+
+
+    <Border
+      x:Name="FlowDocContainer"
+      Margin="20"
+      Padding="10"
+      HorizontalAlignment="Stretch"
+      Background="{DynamicResource MainSpaceDarker}"
+      BorderBrush="{DynamicResource Separator}"
+      BorderThickness="1"
+      CornerRadius="10"
+      Visibility="Hidden">
+      <FlowDocumentReader
+        Padding="5,5,5,5"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        VerticalContentAlignment="Center"
+        FontFamily="{DynamicResource MainFontFamily}"
+        Foreground="Black"
+        ViewingMode="Page"
+        Zoom="150">
+        <FlowDocument
+          Name="mainDoc"
+          ColumnWidth="381"
+          FlowDirection="{DynamicResource LanguageDirection}"
+          FontFamily="{DynamicResource MainFontFamily}"
+          FontSize="12"
+          PageHeight="21cm"
+          PagePadding="1cm"
+          PageWidth="14.85cm">
+          <Section Name="Title" LineHeight="20">
+            <Table
+              x:Name="HeadTable"
+              CellSpacing="12"
+              TextAlignment="Center" />
+            <Table
+              x:Name="TitleTable"
+              CellSpacing="20"
+              LineHeight="20"
+              TextAlignment="Center" />
+          </Section>
+
+          <Paragraph
+            Name="OpeningStatement"
+            FontSize="14"
+            LineHeight="14"
+            TextAlignment="Left" />
+
+
+          <Section>
+            <Table
+              x:Name="ProductsTable"
+              Margin="5,10"
+              CellSpacing="12"
+              TextAlignment="Center" />
+          </Section>
+
+          <Section
+            Name="Totals"
+            Margin="5,10"
+            FontSize="14"
+            LineHeight="14"
+            TextAlignment="Right">
+            <Paragraph />
+            <Paragraph Name="Total" />
+            <Paragraph Name="Tva" />
+            <Paragraph Name="TotalandTva" />
+
+          </Section>
+          <Paragraph
+            Name="ClosingStatement"
+            FontSize="14"
+            LineHeight="14"
+            TextAlignment="Left" />
+          <Table
+            x:Name="PartiesTable"
+            CellSpacing="20"
+            LineHeight="20"
+            TextAlignment="Center" />
+        </FlowDocument>
+      </FlowDocumentReader>
+    </Border>
+
+    <Border
+      x:Name="XpsContainer"
+      Grid.Column="1"
+      Margin="10"
+      Padding="5"
+      HorizontalAlignment="Stretch"
+      Background="{DynamicResource MainSpaceDarker2}"
+      BorderBrush="{DynamicResource Separator}"
+      BorderThickness="1"
+      CornerRadius="10"
+      FlowDirection="LeftToRight">
+      <DocumentViewer
+        x:Name="DocView"
+        FlowDirection="LeftToRight"
+        ShowPageBorders="False"
+        Style="{StaticResource DocView}"
+        Zoom="80" />
+    </Border>
+  </Grid>
+</UserControl>

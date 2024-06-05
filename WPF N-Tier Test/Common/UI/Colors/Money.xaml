@@ -1,0 +1,15 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+  <SolidColorBrush x:Key="MainAccent" Color="#72b34c" />
+  <SolidColorBrush x:Key="MainAccentLighter1" Color="#85c576" />
+  <SolidColorBrush x:Key="MainAccentLighter2" Color="#cef3c7" />
+  <SolidColorBrush x:Key="MainAccentLighter3" Color="#e1f6dc" />
+  <SolidColorBrush x:Key="MainAccentDarker1" Color="#1c8d00" />
+  <SolidColorBrush x:Key="MainAccentDarker2" Color="#115a00" />
+  <SolidColorBrush x:Key="MainAccentDarker3" Color="#072700" />
+  <SolidColorBrush x:Key="SecondAccent" Color="#ff8f5d" />
+
+</ResourceDictionary>

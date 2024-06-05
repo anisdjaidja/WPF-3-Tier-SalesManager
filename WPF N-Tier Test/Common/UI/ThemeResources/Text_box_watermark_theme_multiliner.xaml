@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style x:Key="Text_box_watermark_theme_multiliner" TargetType="{x:Type TextBox}">
+    <Setter Property="Foreground" Value="{Binding InputTextColor}" />
+    <Setter Property="FontFamily" Value="/Fonts/#Readex Pro" />
+    <Setter Property="FontWeight" Value="Light" />
+    <Setter Property="FontSize" Value="{Binding InputSize}" />
+    <Setter Property="Padding" Value="5,1" />
+    <Setter Property="Background" Value="{Binding TBoxBackColor}" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TextBox}">
+          <Grid>
+            <Border
+              x:Name="BRDR"
+              Width="{TemplateBinding Width}"
+              Height="{TemplateBinding Height}"
+              Background="{Binding TBoxBackColor}"
+              BorderBrush="#FF7D8683"
+              BorderThickness="0"
+              CornerRadius="2"
+              Cursor="IBeam" />
+            <ScrollViewer
+              x:Name="PART_ContentHost"
+              Margin="3,0,0,0"
+              VerticalAlignment="Top"
+              Cursor="IBeam"
+              FontFamily="/Fonts/#Readex Pro" />
+            <Label
+              x:Name="WaterMarkLabel"
+              Padding="10,5"
+              VerticalAlignment="Top"
+              Content="{TemplateBinding Tag}"
+              Cursor="IBeam"
+              FontFamily="/Fonts/#Readex Pro"
+              Foreground="Gray"
+              Visibility="Collapsed" />
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+              <Setter TargetName="BRDR" Property="Background" Value="#005F8C" />
+              <Setter Property="Foreground" Value="{Binding TBoxBackColor}" />
+              <Setter Property="SpellCheck.IsEnabled" Value="True" />
+            </Trigger>
+            <MultiTrigger>
+              <MultiTrigger.Conditions>
+                <Condition Property="Text" Value="" />
+              </MultiTrigger.Conditions>
+              <Setter TargetName="WaterMarkLabel" Property="Visibility" Value="Visible" />
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Foreground" Value="DimGray" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>
