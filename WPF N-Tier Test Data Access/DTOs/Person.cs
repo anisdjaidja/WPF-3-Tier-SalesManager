@@ -1,28 +1,30 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WPF_N_Tier_Test_Data_Access.DTOs
 {
     public class Person
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
-        public string Company { get; set; } = string.Empty;
+        public string Company { get; set; }
 
-        public string Fax { get; set; } = string.Empty;
+        public string Fax { get; set; }
 
-        public string NIF { get; set; } = string.Empty;
+        public string NIF { get; set; }
 
-        public string NIS { get; set; } = string.Empty;
+        public string NIS { get; set; }
 
-        public string N_A { get; set; } = string.Empty;
+        public string N_A { get; set; }
 
-        public string Address { get; set; } = string.Empty;
+        public string Address { get; set; }
 
-        public string Phone { get; set; } = string.Empty;
+        public string Phone { get; set; }
 
     }
 }

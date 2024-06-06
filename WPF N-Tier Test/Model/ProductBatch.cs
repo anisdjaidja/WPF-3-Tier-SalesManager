@@ -14,6 +14,7 @@ namespace WPF_N_Tier_Test.Model
             ProductName = P.Name;
             Model = P.Model;
             Category = P.Category;
+            Quantity = P.Quantity;
             UnitPrice = P.SalePrice;
             UnitCost = P.BasePrice;
             UnitMetric = P.Metric;
@@ -23,6 +24,17 @@ namespace WPF_N_Tier_Test.Model
             get
             {
                 return Quantity.ToString() + " " + UnitMetric;
+            }
+        }
+        public double NetTotal => TotalPrice - TotalPrice * (Discount / 100);
+        public double SalePrice
+        {
+            get { return UnitPrice; }
+            set
+            {
+                if (value < 0)
+                    UnitPrice = 0;
+                else UnitPrice = value;
             }
         }
         public double Discount

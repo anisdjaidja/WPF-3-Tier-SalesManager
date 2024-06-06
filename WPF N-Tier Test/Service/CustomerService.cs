@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test_Data_Access.DataAccess;
+using WPF_N_Tier_Test_Data_Access.DTOs;
 
 namespace WPF_N_Tier_Test.Service
 {
@@ -14,65 +16,53 @@ namespace WPF_N_Tier_Test.Service
     {
         private SalesContext dbContext;
 
-        public CustomerService(SalesContext dbContext)
+        public CustomerService(SalesDesignTimeContextFactory contextFactory)
         {
-            this.dbContext = dbContext;
-         
+            this.dbContext = contextFactory.CreateDbContext(null);
+            Initialize();
         }
-
         public async void Initialize()
         {
-            if(dbContext.Customers.Count() == 0)
+            if (dbContext.Customers.Count() == 0)
             {
                 string file = File.ReadAllText(@"E:\\Current Dev\\WPF N-Tier Test\\WPF N-Tier Test\\Service\\Seeds\\persons.json");
-                var ppl = JsonSerializer.Deserialize<Customer>(file);
-                await dbContext.AddRangeAsync(ppl);
+                var ppl = JsonConvert.DeserializeObject<Customer[]>(file);
+
+                await dbContext.AddRangeAsync(ppl!);
                 await dbContext.SaveChangesAsync();
+                ReportSuccess("Seeded Customers Table with fake data");
             }
-        }
-        internal async Task<bool> DELETE(int id)
-        {
-            return false;
         }
 
         internal async Task<IEnumerable<Customer>> GetAllCustomers()
         {
-            return new List<Customer>();
+            return dbContext.Customers.Select(x => CustomerFromDTO(x));
         }
-
-        internal async Task<Customer> INSERT(Customer customer)
+        private static Customer CustomerFromDTO(Person p)
         {
-            return new Customer();
+            return new Customer
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Company = p.Company,
+                Fax = p.Fax,
+                NIF = p.NIF,
+                NIS = p.NIS,
+                N_A = p.N_A,
+                Address = p.Address,
+                Phone = p.Phone,
+            };
         }
+        //internal async Task<IEnumerable<Customer>> SearchCustomer(List<string> subsets, int v)
+        //{
+        //    foreach(string subset in subsets)
+        //    {
 
-        internal async Task<Order> INSERT_Order(Order newOrder)
-        {
-            return new Order();
-        }
+        //    }
+        //    return dbContext.Customers.Select(x => x as Customer).Where(x => x.Name.Contains);
+        //}
 
-        internal async Task<bool> PAY_Order(int oID)
-        {
-            return false;
-        }
 
-        internal async Task<bool> REVOKE_Order(int oID)
-        {
-            return false;
-        }
 
-        internal async Task<IEnumerable<Customer>> SearchPatient(List<string> subsets, int v)
-        {
-            return new List<Customer>();
-        }
-
-        internal async Task<Customer> UPDATE(int id, string personName, string phone, string address, string company, string fax, string nif, string nis, string n_a, DateTime birthDate)
-        {
-            return new Customer();
-        }
-
-        internal async Task<bool> VALIDATE_Order(int oID)
-        {
-            return false;
-        }
     }
 }

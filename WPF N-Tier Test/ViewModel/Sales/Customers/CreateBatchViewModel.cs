@@ -11,36 +11,33 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.Customers
         IArticleSelector Parent;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(Quantity), nameof(ProductName), nameof(Discount), nameof(SalePrice))]
+
         private ProductBatch? currentBatch;
-        
-        string? ProductName => CurrentBatch?.ProductName;
-        
-        double? Quantity => CurrentBatch?.Quantity;
-
-        double? Discount => CurrentBatch?.Discount;
-
-        double? SalePrice => CurrentBatch?.UnitPrice;
-
+        [ObservableProperty]
+        private bool edition = false;
         public CreateBatchViewModel(IArticleSelector parent, Article p)
         {
             Parent = parent;
             CurrentBatch = new ProductBatch(p);
+
         }
         public CreateBatchViewModel(IArticleSelector parent, ProductBatch pb)
         {
             Parent = parent;
             CurrentBatch = pb;
+            Edition = true;
         }
         [RelayCommand]
         public void Up()
         {
             CurrentBatch?.SetQuantity(CurrentBatch.Quantity + 1);
+            OnPropertyChanged(nameof(CurrentBatch));
         }
         [RelayCommand]
         public void Down()
         {
             CurrentBatch?.SetQuantity(CurrentBatch.Quantity - 1);
+            OnPropertyChanged(nameof(CurrentBatch));
         }
         [RelayCommand]
         public void Remove()
@@ -50,7 +47,12 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.Customers
         [RelayCommand]
         public void Accept()
         {
-            if (Quantity <= 0) { ReportError(); return; } // Selected lower or equals Zero
+            if (CurrentBatch?.Quantity <= 0) { ReportError(); return; } // Selected lower or equals Zero
+            if(Edition)
+            {
+                Parent.OnProductBatchEdited(CurrentBatch, 0);
+                return;
+            }
             Parent.OnProductBatchCreated(CurrentBatch);
         }
         [RelayCommand]

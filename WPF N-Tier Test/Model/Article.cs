@@ -30,6 +30,13 @@
                 return Math.Round(SalePrice - BasePrice);
             }
         }
+        public bool Available
+        {
+            get
+            {
+                return Quantity > 0;
+            }
+        }
         public bool LowOnQuantity { 
             get 
             { 

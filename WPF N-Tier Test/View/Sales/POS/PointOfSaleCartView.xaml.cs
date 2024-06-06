@@ -30,21 +30,46 @@ namespace WPF_N_Tier_Test.View.Sales.POS
             if (e.Column.Header.ToString() == "UnitCost") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "UnitMetric") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "UnitPrice") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Article") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "Quantity") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "discount") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "TotalPrice") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Id") { e.Cancel = true; }
 
             if (e.Column.Header.ToString() == "ProductName")
             {
+                e.Column.DisplayIndex = 0;
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
                 e.Column.CellStyle = (Style)FindResource("NameCellAlt");
                 e.Column.Header = "Product";
             }
             if (e.Column.Header.ToString() == "FormatedQuantity")
             {
+                e.Column.DisplayIndex = 2;
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
                 e.Column.Header = "Quantity";
             }
-            if (e.Column.Header.ToString() == "TotalPrice")
+            if (e.Column.Header.ToString() == "UnitPrice")
             {
+                e.Column.DisplayIndex = 1;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Unit Price";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "Discount")
+            {
+                e.Column.DisplayIndex = 3;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Discount";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N0}%"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "NetTotal")
+            {
+                e.Column.DisplayIndex = 4;
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
                 e.Column.Header = "Total";
                 e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");

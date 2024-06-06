@@ -26,14 +26,14 @@ namespace WPF_N_Tier_Test.ViewModel.App
         CustomerService clientsService;
         StockService stockService;
 
-        public SalesContext DbContext { get; }
+        public SalesDesignTimeContextFactory factory { get; }
 
         #endregion
 
         #endregion
-        public AppWindowViewModel(SalesContext dbContext)
+        public AppWindowViewModel(SalesDesignTimeContextFactory contextFactory)
         {
-            this.DbContext = dbContext;
+            this.factory = contextFactory;
             ResolveDependencies();
             
         }
@@ -59,8 +59,8 @@ namespace WPF_N_Tier_Test.ViewModel.App
         void ResolveServices()
         {
             //var app = Application.Current as WPF_N_Tier_Test.App;
-            clientsService = new(DbContext);
-            stockService = new(DbContext);
+            clientsService = new(factory);
+            stockService = new(factory);
             //supplyService = new(DBclient);
             //memberService = new(DBclient);
             //subscriptionPlansService = new(DBclient!.GetDatabase(app._AppConfig.DbName));

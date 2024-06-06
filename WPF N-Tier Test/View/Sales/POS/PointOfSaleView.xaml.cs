@@ -5,14 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Modules.Helpers;
 using WPF_N_Tier_Test.ViewModel.Sales.POS;
 using static WPF_N_Tier_Test.Modules.Helpers.AnimationHelper;
@@ -28,10 +20,10 @@ namespace WPF_N_Tier_Test.View.Register
         {
             InitializeComponent();
             DataContext = viewModel;
+            viewModel.BatchCreatorRequested += (a) => AnimationHelper.SlideFadePopup(QSelectorPopup, true, AnimationHelper.SlidDirection.Down);
+            viewModel.BatchCreatorCollapsed += () => AnimationHelper.SlideFadePopup(QSelectorPopup, false, AnimationHelper.SlidDirection.Down);
+
         }
-
-
-
         private void PreviewNumericInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             char last = e.Text[^1];

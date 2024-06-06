@@ -58,12 +58,10 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsOrderSelected),
-            nameof(IsEligibleToInvoice),
             nameof(IsEligibleToBill)
             )]
         public Order? selectedOrder;
         public bool IsOrderSelected => SelectedOrder != null;
-        public bool IsEligibleToInvoice => (SelectedOrder?.IsValidated )?? false;
         public bool IsEligibleToBill => (SelectedOrder?.IsPaid )?? false;
 
 
@@ -81,20 +79,7 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
         {
             SelectedCustomer = Customers.Where(x => x.Id == PatientID).FirstOrDefault();
         }
-        [RelayCommand]
-        public async Task DeleteCustomer()
-        {
-            if (SelectedPerson == null)
-                return;
-            IsBusy = true;
-            var result = await customersService.DELETE(SelectedCustomer.Id);
-            if(result != null)
-            {
-                Customers.Remove(SelectedCustomer);
-            }
-            IsBusy = false;
 
-        }
         private void Facturate(FactureType type)
         {
             FacturationSpace facturation = new FacturationSpace(SelectedOrder, SelectedCustomer);

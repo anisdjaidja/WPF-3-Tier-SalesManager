@@ -32,15 +32,14 @@ namespace WPF_N_Tier_Test.ViewModel.App
         [RelayCommand]
         public async Task Query(string value)
         {
-            
-            DropDownVM = new(this);
-            Parent.CallBackDropDown();
-            searchEngine = new SearchEngine(value);
-            var found = await clientsService.SearchPatient(searchEngine.Subsets, 3);
-            FoundPatients = new ObservableCollection<Customer>(found);
-            string foundNames = "";
-            foreach (var patient in found) { foundNames += patient.Name; }
-            ReportSuccess($"Query invoked with Searchkey : {value} and found {foundNames}");
+            //DropDownVM = new(this);
+            //Parent.CallBackDropDown();
+            //searchEngine = new SearchEngine(value);
+            //var found = await clientsService.SearchPatient(searchEngine.Subsets, 3);
+            //FoundPatients = new ObservableCollection<Customer>(found);
+            //string foundNames = "";
+            //foreach (var patient in found) { foundNames += patient.Name; }
+            //ReportSuccess($"Query invoked with Searchkey : {value} and found {foundNames}");
         }
        
         internal void OnPatientSelected(int id)

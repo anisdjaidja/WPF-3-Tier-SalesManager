@@ -46,7 +46,7 @@
       HorizontalAlignment="Center"
       FontSize="18"
       FontWeight="Bold"
-      Text="{Binding ProductName}"
+      Text="{Binding Path=CurrentBatch.ProductName}"
       TextWrapping="Wrap" />
 
 
@@ -64,7 +64,7 @@
       PreviewTextInput="PreviewNumericInput"
       Style="{StaticResource LongTextBox}"
       Tag="{DynamicResource Quantity}"
-      Text="{Binding Quantity}"
+      Text="{Binding Path=CurrentBatch.Quantity, Mode=TwoWay}"
       TextChanged="Quantity_TextChanged" />
 
     <StackPanel
@@ -124,7 +124,7 @@
       Foreground="DarkOliveGreen"
       Style="{StaticResource LongTextBox}"
       Tag="{DynamicResource Unit Price}"
-      Text="{Binding SalePrice}" />
+      Text="{Binding Path=CurrentBatch.SalePrice, Mode=TwoWay}" />
     <TextBox
       x:Name="DescBox"
       Grid.Row="3"
@@ -136,7 +136,7 @@
       Foreground="OrangeRed"
       Style="{StaticResource LongTextBox}"
       Tag="{DynamicResource Discount}"
-      Text="{Binding Discount}" />
+      Text="{Binding Path=CurrentBatch.Discount, Mode=TwoWay}" />
 
     <StackPanel
       Grid.Row="5"
@@ -162,7 +162,7 @@
         Margin="5,0"
         Padding="20,0"
         Command="{Binding AcceptCommand}"
-        Content="{DynamicResource Accept}"
+        Content="{DynamicResource add}"
         Style="{StaticResource Btn_Theme2}" />
 
     </StackPanel>

@@ -1,15 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
 using WPF_N_Tier_Test.ViewModel.Sales.Customers;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using WPF_N_Tier_Test_Data_Access.DTOs;
 
 namespace WPF_N_Tier_Test.ViewModel.Sales.POS
 {
@@ -36,31 +32,44 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         public PointOfSaleViewModel(StockService stockservice, CustomerService customersService)
         {
             this.stockService = stockservice;
-            CartVM = new PointOfSaleCartViewModel(customersService);
+            CartVM = new PointOfSaleCartViewModel(this, customersService);
             LoadStock();
             OnPropertyChanged(nameof(CurrentStock));
+            
         }
 
 
         private async void LoadStock()
         {
-            var all = await stockService.GetAllAvailableProductsinStock();
+            var all = await stockService.GetAllStock();
             CurrentStock = new ObservableCollection<Article>(all);
         }
 
-        [RelayCommand]
-        public void OnProductPicked(Article p)
+
+        public Article? SelectedArticle
         {
-            if (CheckIfPresent(p))
-                return;
-            CreateBatchVM = new CreateBatchViewModel(this, p);
-            BatchCreatorRequested.Invoke(p);
+            get
+            {
+                return null;
+            }
+            set
+            {
+                ReportSuccess("article selected");
+                if (CheckIfPresent(value))
+                    return;
+                CreateBatchVM = new CreateBatchViewModel(this, value);
+                OnPropertyChanged(nameof(CreateBatchVM));
+                BatchCreatorRequested.Invoke(value);
+            }
         }
         private bool CheckIfPresent(Article p)
         {
             return (CartVM.Bucket?.Where(x => x.ProductId == p.Id).FirstOrDefault() != null);
         }
-
+        private bool CheckIfPresentbatch(ProductBatch pb)
+        {
+            return (CartVM.Bucket?.Where(x => x.ProductId == pb.ProductId).FirstOrDefault() != null);
+        }
         public void OnProductBatchCreated(ProductBatch? pb)
         {
             if (pb == null)
@@ -69,14 +78,20 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
                 return;
             }
             CartVM.OnProductBatchCreated(pb);
-            ReportSuccess();
             BatchCreatorCollapsed?.Invoke();
             CreateBatchVM = null;
         }
-
+        public void EditProductBatch(ProductBatch? pb)
+        {
+            CreateBatchVM = new CreateBatchViewModel(this, pb);
+            OnPropertyChanged(nameof(CreateBatchVM));
+            BatchCreatorRequested.Invoke(null);
+        }
         public void OnProductBatchEdited(ProductBatch? pb, int id)
         {
-            throw new NotImplementedException();
+                CartVM.OnProductBatchEdited(pb, 0);
+                BatchCreatorCollapsed?.Invoke();
+                return;
         }
 
         public void OnProductBatchRemoved(int id)

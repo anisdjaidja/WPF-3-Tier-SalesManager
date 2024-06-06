@@ -1,10 +1,10 @@
-﻿using WPF_N_Tier_Test.Modules.Helpers;
+﻿using System.Transactions;
+using WPF_N_Tier_Test.Modules.Helpers;
 using WPF_N_Tier_Test_Data_Access.DTOs;
 namespace WPF_N_Tier_Test.Model
 {
-    public class Order : WPF_N_Tier_Test_Data_Access.DTOs.Transaction<ProductBatch>
+    public class Order : Transaction<ProductBatch>
     {
-        public Customer Customer { get; set; }
 
         public event EventHandler<bool>? TransactionFeaturesChanged;
         protected virtual void OnRiseTransactionFeaturesChanged(bool e)
@@ -33,10 +33,8 @@ namespace WPF_N_Tier_Test.Model
             {
                 if (IsPaid)
                     return "Paid - " + PaymentDate?.ToShortDateString();
-                else if (IsValidated)
-                    return "Not Paid";
                 else
-                    return "Proforma";
+                    return "Not Paid";
             }
         }
         public string Since
@@ -61,34 +59,6 @@ namespace WPF_N_Tier_Test.Model
             }
         }
 
-        public bool IsShipped
-        {
-            get { return shipped; }
-            set
-            {
-                if (value == shipped)
-                    return;
-                if (value)
-                    ShipmentDate = DateTime.Now;
-                shipped = value;
-                OnRiseTransactionFeaturesChanged(true);
-            }
-        }
-
-        public bool IsValidated
-        {
-            get { return validated; }
-            set
-            {
-                if (value == validated)
-                    return;
-                if (value)
-                    ValidationDate = DateTime.Now;
-                validated = value;
-                OnRiseTransactionFeaturesChanged(true);
-            }
-        }
-
         public double Discount
         {
             get { return discount; }
@@ -102,7 +72,7 @@ namespace WPF_N_Tier_Test.Model
             }
         }
 
-        public double Amount { get { return TransactedEntities.ToList().Sum(a => a.TotalPrice); } }
+        public double Amount { get { return TransactedEntities.ToList().Sum(a => a.NetTotal); } }
         public double Total => Amount - (Amount * (Discount / 100));
         public double GrossMargin
         {

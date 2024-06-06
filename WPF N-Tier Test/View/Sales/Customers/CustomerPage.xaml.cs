@@ -17,8 +17,6 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
 
             VM.OrderDetailsRequested += () => AnimationHelper.SlideFadePopup(OrderDetailsPopup, true, AnimationHelper.SlidDirection.Down);
             VM.OrderDetailsClosed += () => AnimationHelper.SlideFadePopup(OrderDetailsPopup, false, AnimationHelper.SlidDirection.Down);   
-       
-        
         }
         
         

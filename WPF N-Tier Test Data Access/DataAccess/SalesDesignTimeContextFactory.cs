@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WPF_N_Tier_Test_Data_Access.DataAccess
 {
-    internal class SalesDesignTimeContextFactory : IDesignTimeDbContextFactory<SalesContext>
+    public class SalesDesignTimeContextFactory : IDesignTimeDbContextFactory<SalesContext>
     {
         public SalesContext CreateDbContext(string[] args)
         {

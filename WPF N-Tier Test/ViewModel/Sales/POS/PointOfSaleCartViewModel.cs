@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
+using WPF_N_Tier_Test.ViewModel.Sales.Customers;
 
 namespace WPF_N_Tier_Test.ViewModel.Sales.POS
 {
@@ -10,13 +11,15 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         private CustomerService customerService;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(Total), nameof(Bucket))]
+        [NotifyPropertyChangedFor(nameof(Total), nameof(SubTotal), nameof(Bucket))]
         public Order newOrder;
-        [ObservableProperty]
-        public double subTotal = 0;
-        [ObservableProperty]
-        public double total = 0;
+        public double SubTotal => NewOrder.Amount;
+        public double Total => NewOrder.Total;
         public ObservableCollection<ProductBatch>? Bucket => NewOrder?.TransactedEntities;
+        [ObservableProperty]
+        public ObservableCollection<Customer>? customerList;
+        [ObservableProperty]
+        public Customer? selectedCustomer;
 
         [ObservableProperty]
         public Article selectedProduct;
@@ -24,45 +27,56 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         public event Action<QuantitySelectorViewModel> ProductSelectionRequested;
         public event Action<bool> ProductSelectionSubmited;
 
-
-        public PointOfSaleCartViewModel(CustomerService customerService)
+        PointOfSaleViewModel Parent;
+        public PointOfSaleCartViewModel(PointOfSaleViewModel parent, CustomerService customerService)
         {
+            Parent = parent;
             this.customerService = customerService;
+            CustomerList = new(customerService.GetAllCustomers().Result.ToList());
             NewOrder = new() { Customer = null };
-            NewOrder.TransactionFeaturesChanged += OnNewOrderEdited;
-        }
-        private void OnNewOrderEdited(object? sender, bool e)
-        {
-            SubTotal = NewOrder.Amount;
-            Total = NewOrder.Total;
+            NewOrder.TransactionFeaturesChanged += (o,s) => NewOrder_TransactionFeaturesChanged();
         }
 
-        public void OnProductSelection(Article product)
+        private void NewOrder_TransactionFeaturesChanged()
         {
-            ProductSelectionRequested.Invoke(new QuantitySelectorViewModel(this, product));
+            OnPropertyChanged(nameof(NewOrder));
+            OnPropertyChanged(nameof(SubTotal));
+            OnPropertyChanged(nameof(Total));
+        }
+
+        public ProductBatch? SelectedBatch
+        {
+            set
+            {
+                ReportSuccess("Product Batch selected for edition");
+                Parent.EditProductBatch(value);
+            }
         }
 
         public void OnProductBatchCreated(ProductBatch? pb)
         {
             if (pb != null)
                 Bucket?.Add(pb);
-            ProductSelectionSubmited.Invoke(true);
+            NewOrder_TransactionFeaturesChanged();
+            ProductSelectionSubmited?.Invoke(true);
         }
 
         public void OnProductBatchEdited(ProductBatch? pb, int id)
         {
             if (pb != null)
             {
-                Bucket.Remove(Bucket.Where(x => x.ProductId == id).FirstOrDefault());
-                Bucket.Add(pb);
+                int order = NewOrder.TransactedEntities.IndexOf(pb);
+                NewOrder.TransactedEntities.Remove(NewOrder.TransactedEntities.Where(x => x.ProductId == pb.ProductId).FirstOrDefault());
+                NewOrder.TransactedEntities.Insert(order, pb);
+                ReportSuccess("Product batch edited");
+                NewOrder_TransactionFeaturesChanged();
             }
-            ProductSelectionSubmited.Invoke(true);
         }
 
         public void OnProductBatchRemoved(int id)
         {
-            Bucket.Remove(Bucket.Where(x => x.ProductId == id).FirstOrDefault());
-            ProductSelectionSubmited.Invoke(false);
+            NewOrder.TransactedEntities.Remove(NewOrder.TransactedEntities.Where(x => x.ProductId == id).FirstOrDefault());
+            NewOrder_TransactionFeaturesChanged();
         }
     }
 }

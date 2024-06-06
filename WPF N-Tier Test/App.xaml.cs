@@ -18,15 +18,15 @@ namespace WPF_N_Tier_Test
         public AppConfig _AppConfig;
         private async void OnStart(object sender, StartupEventArgs e)
         {
-            RegisterGlobalExceptionHandling();
+            //RegisterGlobalExceptionHandling();
 
             globalMessageStore = new GlobalMessageStore();
 
             _AppConfig = new();
             _AppConfig.load();
 
-            SalesContext dbContext = new SalesContext(new DbContextOptionsBuilder().UseSqlServer(_AppConfig.DbConnectionString).Options);
-            appWindowViewModel = new AppWindowViewModel(dbContext);
+            SalesDesignTimeContextFactory contextFactory = new SalesDesignTimeContextFactory();
+            appWindowViewModel = new AppWindowViewModel(contextFactory);
             MainWindow mainWindow = new MainWindow(_AppConfig, globalMessageStore, appWindowViewModel);
             Current.MainWindow = mainWindow;
             mainWindow.Show();
