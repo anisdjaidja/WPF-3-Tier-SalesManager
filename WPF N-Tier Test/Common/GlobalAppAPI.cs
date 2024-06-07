@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using WPF_N_Tier_Test.Model;
 
 namespace WPF_N_Tier_Test.Modules.Common
 {
@@ -31,6 +32,11 @@ namespace WPF_N_Tier_Test.Modules.Common
             var app = Application.Current as App;
             string mssg = Current.TryFindResource("Network issue").ToString() ?? "Network issue";
             app.globalMessageStore.SetCurrentMessage(mssg + ", "+ errorMssg, Modules.Common.GlobalMessageType.Error);
+        }
+        public static void AddShortcut (FavShortcut shortcut)
+        {
+            var app = Application.Current as App;
+            app.AddShortcut(shortcut);
         }
     }
 }

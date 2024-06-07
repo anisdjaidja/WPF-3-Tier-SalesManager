@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using WPF_N_Tier_Test.Common.UI.Workspaces;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
-using WPF_N_Tier_Test.View.Sales.Customers;
 using WPF_N_Tier_Test.ViewModel.Sales.Customers;
 using WPF_N_Tier_Test.Views.Windows;
 
@@ -33,14 +32,38 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
             IsBusy = true;
             var cs = await salesService.GetAllOrders();
             CurrentOrders = new (cs);
-            OnPropertyChanged(nameof(CurrentOrders));
+            CurrentViewSource = CollectionViewSource.GetDefaultView(CurrentOrders);
+            OnPropertyChanged(nameof(CurrentViewSource));
             IsBusy = false;
         }
-
+        public string? Groupbykey
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    ReportSuccess("Grouping");
+                    Groupby(value);
+                }
+            }
+        }
+        [RelayCommand]
+        public async Task Groupby(string key)
+        {
+            CurrentViewSource.GroupDescriptions.Clear();
+            if(key != "None")
+                CurrentViewSource.GroupDescriptions.Add(new PropertyGroupDescription(key));
+            OnPropertyChanged(nameof(CurrentViewSource));
+        }
         #region Orders
         [ObservableProperty]
         public ObservableCollection<Order>? currentOrders;
-
+        [ObservableProperty]
+        public ICollectionView? currentViewSource;
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsOrderSelected), nameof(CustomerName))]
         public Order? selectedOrder;
@@ -57,15 +80,15 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
 
         private void Facturate(FactureType type)
         {
-            //FacturationSpace facturation = new FacturationSpace(SelectedOrder);
-            //string title = Current.FindResource("Prescription") + " " + SelectedOrder.TransactionID + " - " + Current.FindResource("Patient") + ": " + SelectedCustomer.Name;
-            //ChildWindow box = new ChildWindow(facturation, title);
-            //box.Show();
+            FacturationSpace facturation = new FacturationSpace(SelectedOrder, type);
+            string title =  "Document " + SelectedOrder.TransactionID + " - " + Current.FindResource("Customer") + ": " + SelectedOrder.Customer.Name;
+            ChildWindow box = new ChildWindow(facturation, title);
+            box.Show();
         }
         [RelayCommand]
         public void PrintOrderReceipt()
         {
-            Facturate(FactureType.Receipt);
+            Facturate(FactureType.Invoice);
         }
 
 
@@ -80,6 +103,7 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
         public void OnOrderModificationCommited(bool StatusSignal = true)
         {
             if (!StatusSignal) { OrderDetailsClosed?.Invoke(); }
+            LoadSales();
             CollectionViewSource.GetDefaultView(CurrentOrders).Refresh();
         }
     }

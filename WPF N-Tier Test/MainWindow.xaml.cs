@@ -17,6 +17,7 @@ namespace WPF_N_Tier_Test
         {
             InitializeComponent();
             DataContext = VM;
+            VM.Favorites = new(config.favShortcuts);
             FeedbackBox.Hook(globalMessageStore);
             _CONFIG = config;
             _CONFIG.load();

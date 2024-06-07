@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.IO;
 using System.Windows;
+using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Modules.Helpers;
 
 namespace WPF_N_Tier_Test
@@ -21,6 +22,7 @@ namespace WPF_N_Tier_Test
         }
         public string DbName = "WPF_N_Tier_TestDocDB";
         private string FilePath = DirectorySurfer.GetAppConfig();
+        public List<FavShortcut> favShortcuts = new List<FavShortcut>();
         public Theme AppTheme = Theme.Default;
         public Colors AppColors = Colors.Orange;
         public Language AppLanguage = Language.English;
@@ -116,6 +118,7 @@ namespace WPF_N_Tier_Test
                 windowHeight = temp.windowHeight; 
                 windowWidth = temp.windowWidth;
                 windowState = temp.windowState;
+                favShortcuts = temp.favShortcuts;
                 return true;
             }
             return false;

@@ -28,7 +28,7 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="0" />
       <ColumnDefinition Width="3*" />
-      <ColumnDefinition Width="300" />
+      <ColumnDefinition Width="400" />
       <ColumnDefinition Width="auto" />
     </Grid.ColumnDefinitions>
 
@@ -76,7 +76,6 @@
             Margin="5"
             VerticalAlignment="Top"
             Click="GenerateDigitWords_Click"
-            IsEnabled="False"
             Style="{StaticResource ActionBtn}">
             <Button.Content>
               <StackPanel>
@@ -134,28 +133,28 @@
           Checked="TableOptionsChanged"
           Content="{DynamicResource Item numbering}"
           FontSize="14"
-          IsChecked="True"
+          IsChecked="False"
           Unchecked="TableOptionsChanged" />
         <CheckBox
-          x:Name="AgeCB"
+          x:Name="CategoryCB"
           Margin="10"
           VerticalAlignment="Center"
           VerticalContentAlignment="Center"
-          Checked="AgeCB_Unchecked"
-          Content="{DynamicResource Age}"
+          Checked="TableOptionsChanged"
+          Content="{DynamicResource Item category}"
           FontSize="14"
-          IsChecked="True"
-          Unchecked="AgeCB_Unchecked" />
+          IsChecked="False"
+          Unchecked="TableOptionsChanged" />
         <CheckBox
-          x:Name="GenderCB"
+          x:Name="ModelCB"
           Margin="10"
           VerticalAlignment="Center"
           VerticalContentAlignment="Center"
-          Checked="GenderCBCB_Checked"
-          Content="{DynamicResource Gendre}"
+          Checked="TableOptionsChanged"
+          Content="{DynamicResource Item model}"
           FontSize="14"
-          IsChecked="True"
-          Unchecked="GenderCBCB_Checked" />
+          IsChecked="False"
+          Unchecked="TableOptionsChanged" />
         <CheckBox
           x:Name="MetricCB"
           Margin="10"
@@ -244,11 +243,6 @@
       </StackPanel>
     </Border>
 
-
-
-
-
-
     <Border
       x:Name="FlowDocContainer"
       Margin="20"
@@ -270,13 +264,13 @@
         Zoom="150">
         <FlowDocument
           Name="mainDoc"
-          ColumnWidth="381"
+          ColumnWidth="525"
           FlowDirection="{DynamicResource LanguageDirection}"
           FontFamily="{DynamicResource MainFontFamily}"
           FontSize="12"
-          PageHeight="21cm"
+          PageHeight="29.7cm"
           PagePadding="1cm"
-          PageWidth="14.85cm">
+          PageWidth="21cm">
           <Section Name="Title" LineHeight="20">
             <Table
               x:Name="HeadTable"
@@ -294,7 +288,6 @@
             FontSize="14"
             LineHeight="14"
             TextAlignment="Left" />
-
 
           <Section>
             <Table
@@ -346,7 +339,7 @@
         FlowDirection="LeftToRight"
         ShowPageBorders="False"
         Style="{StaticResource DocView}"
-        Zoom="80" />
+        Zoom="70" />
     </Border>
   </Grid>
 </UserControl>

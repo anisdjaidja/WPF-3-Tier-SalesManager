@@ -51,11 +51,13 @@ namespace WPF_N_Tier_Test.ViewModel.Sales
         [RelayCommand]
         public void SwitchPage(object PageIDX)
         {
-            NavigateTo(int.Parse(PageIDX.ToString()));
+            CurrentPage = Pages[int.Parse(PageIDX.ToString())];
+            OnPropertyChanged(nameof(CurrentPage));
         }
         public void NavigateTo(int pageIndex)
         {
             CurrentPage = Pages[pageIndex];
+            OnPropertyChanged(nameof(CurrentPage));
         }
 
         public void NavigateToTab(int idx, int tabIdx)

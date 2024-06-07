@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Microsoft.Identity.Client.NativeInterop;
+using System.Windows;
 using System.Windows.Controls;
 using WPF_N_Tier_Test.Modules.Helpers;
 using WPF_N_Tier_Test.ViewModel.Customers;
@@ -20,37 +21,6 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
         }
         
         
-        private void GeneratingCustomerColumns(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            //...
-            if (e.Column.Header.ToString() == "Id") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "ProformaCount") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "ConfirmedCount") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Company") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "N_A") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "NIS") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "NIF") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Fax") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Expenditure") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Payement") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Debt") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Name") { 
-                e.Column.DisplayIndex = 0; 
-                e.Column.CellStyle = (Style)FindResource("NameCell"); 
-                e.Column.Header = FindResource("Name");
-                e.Column.HeaderStyle = (Style)TryFindResource("NameColHeader");
-                
-            }
-            if (e.Column.Header.ToString() == "Phone") { e.Column.Header = FindResource("Phone"); }
-            if (e.Column.Header.ToString() == "BirthDate") { e.Column.Header = FindResource("BirthDate"); (e.Column as DataGridTextColumn).Binding.StringFormat = "dd / MM / yyyy"; }
-            if (e.Column.Header.ToString() == "Gender") { e.Column.Header = FindResource("Gendre"); }
-            if (e.Column.Header.ToString() == "Age") { e.Column.Header = FindResource("Age"); }
-            if (e.Column.Header.ToString() == "Address") { e.Column.Header = FindResource("Address"); }
-            if (e.Column.Header.ToString() == "orders") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "EligibleToDelete") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "Orders") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "OrdersCount") { e.Cancel = true; }
-        }
         private void GeneratingOrderColumns(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             //...
@@ -58,13 +28,24 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
             List<string> toCancel = new List<string>
             {
                 "ID",
-                "TotalAmount",
                 "IsTaxed",
                 "SoldProducts",
                 "Margin",
-                "CustomerID","Validated","Paid","PaymentDate","ValidationDate",
-                "Total","Customer",
-                "TVA","Discount","TransactedEntities", "IsPaid", "IsShipped", "IsValidated", "Amount", "GrossMargin", "Tax", "ShipmentDate", "State", "IsBiologicalTest"
+     
+                "Validated",
+                "Paid",
+                "PaymentDate",
+                "ValidationDate",
+                "Customer",
+                "TVA","Discount",
+                "TransactedEntities",
+                "IsPaid", "IsShipped",
+                "IsValidated",
+                "GrossMargin",
+                "Tax",
+                "ShipmentDate",
+                
+                "IsBiologicalTest"
             };
 
             if (toCancel.Contains(colHeader)) { e.Cancel = true; }
@@ -78,15 +59,26 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
                 e.Column.DisplayIndex = 1;
                 e.Column.Header = FindResource("Since");
             }
-            if (colHeader == "Description")
-            {
-                e.Column.DisplayIndex = 2;
-                e.Column.Header = FindResource("Illness");
-            }
             if (colHeader == "DateTime")
             {
-                e.Column.DisplayIndex = 3;
+                e.Column.DisplayIndex = 2;
                 e.Column.Header = FindResource("Date");
+            }
+            if (colHeader == "Amount")
+            {
+                e.Column.DisplayIndex = 4; e.Column.Header = "SubTotal";
+            }
+            if (colHeader == "Total")
+            {
+                e.Column.DisplayIndex = 5; e.Column.Header = "Total";
+            }
+            if (colHeader == "discount")
+            {
+                e.Column.DisplayIndex = 3; e.Column.Header = "Discount";
+            }
+            if (colHeader == "State")
+            {
+                e.Column.DisplayIndex = 6; e.Column.Header = "State";
             }
         }
 

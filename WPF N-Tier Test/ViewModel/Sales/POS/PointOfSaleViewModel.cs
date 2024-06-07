@@ -107,5 +107,10 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         {
             CartVM = new(this, customerService: customerService);
         }
+        [RelayCommand]
+        public void AddtoFavs()
+        {
+            AddShortcut(new FavShortcut(0, 1, "P.O.S"));
+        }
     }
 }

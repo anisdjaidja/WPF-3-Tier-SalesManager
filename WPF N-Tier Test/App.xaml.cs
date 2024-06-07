@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Threading;
+using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Modules.Common;
 using WPF_N_Tier_Test.ViewModel.App;
 using WPF_N_Tier_Test_Data_Access.DataAccess;
@@ -14,8 +15,8 @@ namespace WPF_N_Tier_Test
     public partial class App : Application
     {
         public GlobalMessageStore globalMessageStore;
-        AppWindowViewModel appWindowViewModel;
-        public AppConfig _AppConfig;
+        private AppWindowViewModel appWindowViewModel;
+        private AppConfig _AppConfig;
         private async void OnStart(object sender, StartupEventArgs e)
         {
             //RegisterGlobalExceptionHandling();
@@ -31,9 +32,6 @@ namespace WPF_N_Tier_Test
             Current.MainWindow = mainWindow;
             mainWindow.Show();
         }
-
-
-
         #region Global Exception Handeling
         private void RegisterGlobalExceptionHandling()
         {
@@ -70,8 +68,21 @@ namespace WPF_N_Tier_Test
                 or NotImplementedException)
                 ? "Network error" : "Unknown error";
             ReportError($"{errorType}: {args.Exception.GetType().Name}");
-            if (errorType == "Network error") { appWindowViewModel?.Reload(); }
+         
 
+        }
+
+        internal void AddShortcut(FavShortcut shortcut)
+        {
+            var identical = appWindowViewModel.Favorites.Where(x => x.Equals(shortcut)).FirstOrDefault();
+            if(identical != null)
+            {
+                appWindowViewModel.Favorites.Remove(identical);
+                _AppConfig.favShortcuts.Remove(identical);
+                return;
+            }
+            appWindowViewModel.Favorites.Add(shortcut);
+            _AppConfig.favShortcuts.Add(shortcut);
         }
 
 

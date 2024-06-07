@@ -44,7 +44,7 @@ namespace WPF_N_Tier_Test.ViewModel.App
        
         internal void OnPatientSelected(int id)
         {
-            Parent.GotoPatient(id);
+            //Parent.GotoPatient(id);
         }
     }
 }

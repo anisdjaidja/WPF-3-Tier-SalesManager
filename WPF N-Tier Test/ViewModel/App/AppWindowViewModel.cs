@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
+using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
 using WPF_N_Tier_Test.View.Sales;
 using WPF_N_Tier_Test.ViewModel.Navigation;
 using WPF_N_Tier_Test.ViewModel.Sales;
+using WPF_N_Tier_Test.ViewModel.Sales.Customers;
 using WPF_N_Tier_Test_Data_Access.DataAccess;
 
 
@@ -26,46 +29,50 @@ namespace WPF_N_Tier_Test.ViewModel.App
         CustomerService clientsService;
         StockService stockService;
         SalesService salesService;
-
+        UserService userService;
         public SalesDesignTimeContextFactory factory { get; }
 
         #endregion
-
+        [ObservableProperty]
+        public ObservableCollection<FavShortcut> favorites;
+        public FavShortcut? SelectedShortcut
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if(value != null) {
+                    ReportSuccess("Going to favorite page shortcut");
+                    NavigateToTab(value.PageIndex, value.TabIndex);
+                }
+                CollectionViewSource.GetDefaultView(Favorites).Refresh();
+                OnPropertyChanged(nameof(Favorites));
+            }
+        }
         #endregion
         public AppWindowViewModel(SalesDesignTimeContextFactory contextFactory)
         {
             this.factory = contextFactory;
-            ResolveDependencies();
-            
-        }
-        public async void Reload()
-        {
-            ResolveDependencies(true);
-        }
-        async void ResolveDependencies(bool connectionOnly = false)
-        {
-            await ResolveDatabaseConnection();
-            if (connectionOnly)
-                return;
             ResolveServices();
+            LoadingOverlayVM = new LoadingOverlayVeiwModel(userService);
+            OnPropertyChanged(nameof(LoadingOverlayVM));
+            LoadingOverlayVM.LogedIn += LoadingOverlayVM_LogedIn;
+
+        }
+        private void LoadingOverlayVM_LogedIn()
+        {
+            LoadingOverlayVM = null;
             ResolveViewModels();
             ResolveWorkspaces();
         }
-        async Task ResolveDatabaseConnection()
-        {
-            LoadingOverlayVM = new LoadingOverlayVeiwModel();
-            OnPropertyChanged(nameof(LoadingOverlayVM));
-            //DBclient = await LoadingOverlayVM.ConnectToDB();
-        }
         void ResolveServices()
         {
-            //var app = Application.Current as WPF_N_Tier_Test.App;
             clientsService = new(factory);
             stockService = new(factory);
             salesService = new(factory);
-            //supplyService = new(DBclient);
-            //memberService = new(DBclient);
-            //subscriptionPlansService = new(DBclient!.GetDatabase(app._AppConfig.DbName));
+            userService = new(factory);
         }
         void ResolveViewModels()
         {
@@ -89,18 +96,13 @@ namespace WPF_N_Tier_Test.ViewModel.App
         public void NavigateToTab(int idx, int tabIdx)
         {
             CurrentWorkspace = WorkSpaces?[idx];
-            if(CurrentWorkspace is INavigationViewModel)
+            OnPropertyChanged(nameof(CurrentWorkspace));
+            if (CurrentWorkspace is INavigationViewModel)
                 (CurrentWorkspace as INavigationViewModel)!.NavigateTo(tabIdx);
         }
         internal void CallBackDropDown()
         {
             SearchDropdownInvoked.Invoke();
-        }
-        public void GotoPatient(int id)
-        {
-            //Navigate(1);
-            //salesViewModel.CustomersVM.GotoPatient(id);
-            
         }
 
         

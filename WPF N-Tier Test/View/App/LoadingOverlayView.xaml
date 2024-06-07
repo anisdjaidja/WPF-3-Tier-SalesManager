@@ -8,8 +8,9 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  d:Visibility="Visible"
   FontFamily="{DynamicResource DisplayFont}"
-  Visibility="{Binding OverlayingApp}"
+  Visibility="{Binding OverlayingApp, FallbackValue=Hidden}"
   mc:Ignorable="d">
   <Border
     Grid.ColumnSpan="2"
@@ -25,8 +26,9 @@
       <Grid x:Name="Main_grid">
         <Grid.RowDefinitions>
           <RowDefinition Height="*" />
+          <RowDefinition Height="1.5 *" />
           <RowDefinition Height="2 *" />
-          <RowDefinition Height="1 *" />
+
           <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
@@ -41,7 +43,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontFamily="{DynamicResource DisplayFont}"
-            FontSize="30"
+            FontSize="28"
             FontWeight="Medium"
             Text="{DynamicResource WPF_N_Tier_Test}" />
           <StackPanel Orientation="Horizontal">
@@ -50,14 +52,7 @@
               Opacity="0.8"
               Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
           </StackPanel>
-          <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontFamily="{DynamicResource DisplayFont}"
-            FontSize="25"
-            FontWeight="Light"
-            Foreground="{DynamicResource MainBorder}"
-            Text="Enterprise" />
+
         </StackPanel>
 
 
@@ -67,21 +62,39 @@
           Margin="10"
           VerticalAlignment="Center"
           Cap="Round"
-          Diameter="100"
+          Diameter="50"
           IsLoading="{Binding IsBusy, FallbackValue=True}"
           Thickness="2" />
-
-        <TextBlock
+        <StackPanel
           Grid.Row="2"
-          Margin="5"
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          FontSize="16">
-          <Run Text="{Binding ConnectionFeedback}" />
-          <Run Text=" ..." />
-        </TextBlock>
+          MinWidth="200"
+          HorizontalAlignment="Center">
+          <TextBox
+            Style="{StaticResource LongTextBox}"
+            Tag="User Name"
+            Text="{Binding UserName}" />
+          <TextBox
+            Style="{StaticResource LongTextBox}"
+            Tag="Password"
+            Text="{Binding Password}" />
+          <Button
+            Margin="0,5"
+            Command="{Binding LoginCommand}"
+            Content="Log In"
+            Style="{StaticResource Btn_Theme2}" />
+          <TextBlock
+            Grid.Row="3"
+            Margin="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="16">
+            <Run Text="{Binding ConnectionFeedback}" />
+            <Run Text=" ..." />
+          </TextBlock>
+        </StackPanel>
+
         <Label
-          Grid.Row="3"
+          Grid.Row="4"
           Margin="20"
           HorizontalAlignment="Left"
           VerticalAlignment="Center"
@@ -91,7 +104,7 @@
           Foreground="{DynamicResource MainBorder}" />
 
         <StackPanel
-          Grid.Row="3"
+          Grid.Row="4"
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
           Orientation="Horizontal">

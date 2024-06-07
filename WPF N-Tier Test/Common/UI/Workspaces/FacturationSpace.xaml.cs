@@ -8,6 +8,7 @@ using System.Windows.Xps;
 using System.IO.Packaging;
 using WPF_N_Tier_Test.Modules.Helpers;
 using WPF_N_Tier_Test.Model;
+using WPF_N_Tier_Test_Data_Access.DTOs;
 
 namespace WPF_N_Tier_Test.Common.UI.Workspaces
 {
@@ -23,42 +24,57 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
     public partial class FacturationSpace : UserControl
     {
         string TITLE;
-        Order presc;
-        Customer patient;
-        public FacturationSpace(Order _presc, Customer _patient)
+        FactureType factureType;
+        Order order;
+        Person client;
+        public FacturationSpace(Order _order, FactureType type)
         {
             InitializeComponent();
-            presc = _presc;
-            patient = _patient;
-            
-            TITLE = FindResource("Prescription upper").ToString();
+            order = _order;
+            client = _order.Customer;
+            factureType = type;
+            switch (factureType)
+            {
+                case FactureType.Invoice:
+                    TITLE = FindResource("Invoice").ToString();
+                    break;
+                case FactureType.Proforma:
+                    TITLE = FindResource("Proforma facture").ToString();
+                    break;
+                case FactureType.Receipt:
+                    TITLE = FindResource("Receipt").ToString();
+                    break;
+                default:
+                    break;
+            }
 
             //DocView.FitToWidth();
             ParseDocument();
         }
         private void ParseDocument()
         {
-            
+
             CreatHeadTable();
             CreatTitleTable();
             CreatInvoiceTable();
-            
-                //Total.Inlines.Add(new Run(string.Format(FindResource("TotalHT") + ": {0 :N2} " + FindResource("Currency short"), presc.Amount)));
-                //Tva.Inlines.Add(new Run(string.Format(FindResource("Tax") + ": {0 :N2} " + FindResource("Currency short"), presc.Tax)));
-                //TotalandTva.Inlines.Add(new Run(string.Format(FindResource("Total") + ": {0 :N2} " + FindResource("Currency long"), presc.Total)));
+            Total.Inlines.Add(new Run(string.Format(FindResource("TotalHT") + ": {0 :N2} " + FindResource("Currency short"), order.Amount)));
+            Tva.Inlines.Add(new Run(string.Format(FindResource("Discount") + ": {0 :N0} %", order.Discount)));
+            TotalandTva.Inlines.Add(new Run(string.Format(FindResource("Total") + ": {0 :N2} " + FindResource("Currency long"), order.Total)));
 
             displayDoc(mainDoc);
         }
 
         public void CreatInvoiceTable()
         {
-
-                
             ProductsTable.Columns.Clear();
             ProductsTable.RowGroups.Clear();
             // Create 6 columns and add them to the table's Columns collection.
-            
-            int numberOfColumns = 2;
+
+            int numberOfColumns = 4;
+            if (NumberingCB.IsChecked.Value) numberOfColumns += 1;
+            if (ModelCB.IsChecked.Value) numberOfColumns += 1;
+            if (CategoryCB.IsChecked.Value) numberOfColumns += 1;
+            if (MetricCB.IsChecked.Value) numberOfColumns += 1;
 
             for (int x = 0; x < numberOfColumns; x++)
             {
@@ -66,6 +82,7 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
                 ProductsTable.Columns[x].Width = new GridLength(1, GridUnitType.Auto);
             }
             int firstcell = 0;
+            if (NumberingCB.IsChecked.Value) { ProductsTable.Columns[0].Width = new GridLength(30, GridUnitType.Pixel); firstcell = 1; }
             ProductsTable.Columns[firstcell].Width = new GridLength(30, GridUnitType.Star);
 
             // Create and add an empty TableRowGroup to hold the table's Rows.
@@ -78,43 +95,55 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
 
             // Global formatting for the header row.
             currentRow.FontSize = 12;
-            currentRow.Background = Brushes.Transparent;
-            currentRow.Foreground = Brushes.Transparent;
+            currentRow.Background = Brushes.WhiteSmoke;
+            currentRow.Foreground = Brushes.Gray;
             // Add cells with content to the second row.
-            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Medicine").ToString()))));
-            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("days").ToString()))));
+            if (NumberingCB.IsChecked.Value)
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Number").ToString()))));
 
+            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Product").ToString()))));
+            if (ModelCB.IsChecked.Value)
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Model").ToString()))));
+            if (CategoryCB.IsChecked.Value)
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(""))));
+            if (MetricCB.IsChecked.Value)
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Metric").ToString()))));
+            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Quantity").ToString()))));
+            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Unit Price").ToString()))));
+            currentRow.Cells.Add(new TableCell(new Paragraph(new Run(FindResource("Total").ToString()))));
             currentRow.Cells[0].TextAlignment = TextAlignment.Left;
 
 
             // Add content in loop.
-            for (int i = 0; i < presc.TransactedEntities.Count; i++)
+            for (int i = 0; i < order.TransactedEntities.Count; i++)
             {
                 ProductsTable.RowGroups[0].Rows.Add(new TableRow());
-                ProductBatch product = presc.TransactedEntities[i];
+                ProductBatch product = order.TransactedEntities[i];
 
                 currentRow = ProductsTable.RowGroups[0].Rows[i + 1];
                 // Global formatting for the row.
                 currentRow.FontSize = 12;
                 currentRow.FontWeight = FontWeights.Normal;
 
+
+
                 // Add cells with content to the third row.
-                string medLine = "";
                 if (NumberingCB.IsChecked.Value)
-                    medLine += (i + 1).ToString() + " - ";
-                medLine += product.ProductName + "\n";
-                if (product.Quantity > 0)
-                    medLine += product.Quantity.ToString() + " ";
-                //medLine += product.MedUnit.ToString();
-                //if (MetricCB.IsChecked.Value)
-                //    if (!string.IsNullOrWhiteSpace(product.DurationDesc))
-                //        medLine += "/" + product.DurationDesc;
-                //currentRow.Cells.Add(new TableCell(new Paragraph(new Run(medLine))) { TextAlignment = TextAlignment.Left});
-                //currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.Duration.TotalDays.ToString() + " " + Current.FindResource("days")))) { TextAlignment = TextAlignment.Right });
+                    currentRow.Cells.Add(new TableCell(new Paragraph(new Run((i + 1).ToString()))) { TextAlignment = TextAlignment.Left });
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.ProductName))));
+                if (ModelCB.IsChecked.Value)
+                    currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.Model))));
+                if (CategoryCB.IsChecked.Value)
+                    currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.ProductId.ToString()))));
+                if (MetricCB.IsChecked.Value)
+                    currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.UnitMetric))));
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(product.FormatedQuantity))));
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(string.Format("{0 :N2}", product.UnitPrice)))));
+                currentRow.Cells.Add(new TableCell(new Paragraph(new Run(string.Format("{0 :N2}", product.TotalPrice)))));
 
                 // Bold the first cell.
-                
-                currentRow.Cells[firstcell].FontWeight = FontWeights.Bold;
+
+                currentRow.Cells[firstcell].FontWeight = FontWeights.Medium;
                 currentRow.Cells[firstcell].FontSize = 13;
                 currentRow.Cells[firstcell].TextAlignment = TextAlignment.Left;
             }
@@ -129,6 +158,8 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             TitleTable.Columns.Clear();
             TitleTable.RowGroups.Clear();
 
+            string orderDate = order.DateTime.Date.ToString("dd/MM/yyyy");
+            if (!DateCB.IsChecked.Value) { orderDate = " . . . . "; }
             TitleTable.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Star) });
             TitleTable.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Auto) });
             TitleTable.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Star) });
@@ -136,27 +167,22 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             TitleTable.RowGroups[0].Rows.Add(new TableRow());
             TableRow TitleRow = TitleTable.RowGroups[0].Rows[0];
             Paragraph titleinfo = new();
-            titleinfo.Inlines.Add(new Run(TITLE) { FontSize = 22, FontWeight = FontWeights.Bold });
+            titleinfo.Inlines.Add(new Run(TITLE + "  ") { FontSize = 19, FontWeight = FontWeights.Bold });
+
+            titleinfo.Inlines.Add(new Run(FindResource("Number") + ": " + order.TransactionID + " / " + FindResource("Date") + ": " + orderDate) { FontSize = 16 });
+
             if (SubtitleBox.Text != string.Empty)
             {
                 titleinfo.Inlines.Add(new Run("\n" + SubtitleBox.Text) { FontSize = 16 });
             }
-            titleinfo.Inlines.Add(new Run("\n"));
-            titleinfo.Inlines.Add(new Run("\n" + FindResource("Patient") + " : " + patient.Name) { FontSize = 14 });
-            if (AgeCB.IsChecked.Value)
-                titleinfo.Inlines.Add(new Run("        " + FindResource("Age") + " : " + patient.Address) { FontSize = 14 });
-            if (true)
-                if (GenderCB.IsChecked.Value)
-                    titleinfo.Inlines.Add(new Run("        " + FindResource("Gendre") + "  : " + patient.Phone) { FontSize = 14 });
 
             TitleRow.Cells.Add(new TableCell() { TextAlignment = TextAlignment.Center });
-            TitleRow.Cells.Add(new TableCell(titleinfo) { LineHeight = 25, TextAlignment = TextAlignment.Center, Background = Brushes.Transparent, Foreground = Brushes.DarkBlue });
+            TitleRow.Cells.Add(new TableCell(titleinfo) { LineHeight = 25, TextAlignment = TextAlignment.Center, Background = Brushes.WhiteSmoke });
             TitleRow.Cells.Add(new TableCell() { TextAlignment = TextAlignment.Center });
         }
         public void CreatHeadTable()
         {
-            HeadTable.Columns.Clear();
-            HeadTable.RowGroups.Clear();
+
             // Create 2 columns and add them to the table's Columns collection.
             HeadTable.Columns.Add(new TableColumn { Width = new GridLength(2, GridUnitType.Star) });
             HeadTable.Columns.Add(new TableColumn { Width = new GridLength(1, GridUnitType.Star) });
@@ -168,48 +194,27 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             // Alias the current working row for easy reference.
             TableRow currentRow = HeadTable.RowGroups[0].Rows[0];
             Paragraph orgInfo = new();
-            //Business business = new Business(); business.Load();
-            //orgInfo.Inlines.Add(new Run(business.NameArabic) { FontSize = 14, FontWeight = FontWeights.Bold });
-            //orgInfo.Inlines.Add(new Run("\n" + business.Name) { FontSize = 14, FontWeight = FontWeights.Bold });
 
-            //if (business.Activity != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + business.Activity));
-            //if (business.Address != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + FindResource("Address") + " : " + business.Address));
-            //if (business.N_Ordre != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + "N ordre : " + business.N_Ordre));
-            //if (business.Phone != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + FindResource("Phone") + " : " + business.Phone));
-            //if (business.Email != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + FindResource("Email") + " : " + business.Email));
-            //if (business.Fax != string.Empty)
-            //    orgInfo.Inlines.Add(new Run("\n" + FindResource("Fax") + " : " + business.Fax));
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("NIF")+ ": " + business.NIF) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("NIS")+ ": " + business.NIS) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("N_A")+ ": " + business.N_A) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("NRC")+ ": " + business.NRC) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("Bank Name")+ ": " + business.BankName) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("Bank Account")+ ": " + business.BankAccount) { Foreground = Brushes.Gray });
-            //orgInfo.Inlines.Add(new Run("\n" + FindResource("Legal form")+ ": " + business.LegalForm) { Foreground = Brushes.Gray });
-            currentRow.Cells.Add(new TableCell(orgInfo) { FontSize = 12, TextAlignment = TextAlignment.Left, Foreground = Brushes.DarkBlue });
+            orgInfo.Inlines.Add(new Run("Business") { FontSize = 14, FontWeight = FontWeights.Bold });
+
+
+            currentRow.Cells.Add(new TableCell(orgInfo) { FontSize = 12, TextAlignment = TextAlignment.Left });
 
             Paragraph personInfo = new();
 
-            //personInfo.Inlines.Add(new Run("\n\n\n"));
+            personInfo.Inlines.Add(new Run("\n\n\n"));
 
-            string prescDate = presc.DateTime.Date.ToString("dd MMMM yyyy");
-            if (!DateCB.IsChecked.Value) { prescDate = " . . . . "; }
+            personInfo.Inlines.Add(new Run("\n" + FindResource("Customer") + ": " + client.Name));
+            if (client.Address != string.Empty)
+                personInfo.Inlines.Add(new Run("\n" + FindResource("Address") + ": " + client.Address));
+            if (client.Company != string.Empty)
+                personInfo.Inlines.Add(new Run("\n" + FindResource("Organization") + ": " + client.Company));
+            personInfo.Inlines.Add(new Run("\n" + FindResource("NIF") + ": " + client.NIF));
+            personInfo.Inlines.Add(new Run("\n" + FindResource("NIS") + ": " + client.NIS));
+            personInfo.Inlines.Add(new Run("\n" + FindResource("N_A") + ": " + client.N_A));
 
-            //personInfo.Inlines.Add(new Run("\n\n" + FindResource("Number") + " " + presc.TransactionID));
-            personInfo.Inlines.Add(new Run("\n" + "Msila le : " + prescDate){Foreground = Brushes.DarkBlue});
-            //if(patient.Company != string.Empty)
-            //    personInfo.Inlines.Add(new Run("\n" + FindResource("Organization") + ": " + patient.Company));
-            //personInfo.Inlines.Add(new Run("\n" + FindResource("NIF") + ": " + patient.NIF));
-            //personInfo.Inlines.Add(new Run("\n" + FindResource("NIS") + ": " + patient.NIS));
-            //personInfo.Inlines.Add(new Run("\n" + FindResource("N_A") + ": " + patient.N_A) );
-            
-            currentRow.Cells.Add(new TableCell(personInfo) { TextAlignment = TextAlignment.Justify, FontSize = 12});
-            
+            currentRow.Cells.Add(new TableCell(personInfo) { TextAlignment = TextAlignment.Justify, FontSize = 12 });
+
 
 
 
@@ -220,8 +225,11 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
         {
             OpeningStatement.Inlines.Clear();
             if (OpeningStatementBox.Text == string.Empty) { OpeningStatement.LineHeight = 1; }
-            else { OpeningStatement.LineHeight = 14;
-                OpeningStatement.Inlines.Add(new Run(OpeningStatementBox.Text)); }
+            else
+            {
+                OpeningStatement.LineHeight = 14;
+                OpeningStatement.Inlines.Add(new Run(OpeningStatementBox.Text));
+            }
 
 
             ClosingStatement.Inlines.Clear();
@@ -231,7 +239,7 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
                 ClosingStatement.LineHeight = 14;
                 ClosingStatement.Inlines.Add(new Run(ClosingStatementBox.Text));
             }
-            
+
         }
         public void ParseParties()
         {
@@ -253,9 +261,9 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             P2info.Inlines.Add(new Run(SignatureParty2.Text) { FontSize = 16 });
 
             Row.Cells.Add(new TableCell(Pinfo) { LineHeight = 25, TextAlignment = TextAlignment.Center });
-            
+
             Row.Cells.Add(new TableCell(P2info) { LineHeight = 25, TextAlignment = TextAlignment.Center });
-            
+
         }
 
         private void displayDoc(FlowDocument flowDocument)
@@ -316,7 +324,7 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             // Show save file dialog box
             Nullable<bool> result = dlg.ShowDialog();
             // Process save file dialog box results
-            if (result == true) { WritePDF(mainDoc, dlg.FileName);}
+            if (result == true) { WritePDF(mainDoc, dlg.FileName); }
         }
 
         private void Print_Click(object sender, RoutedEventArgs e)
@@ -334,12 +342,12 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
             // Show save file dialog box
             Nullable<bool> result = dlg.ShowDialog();
             // Process save file dialog box results
-            if (result == true) { WriteXPS(mainDoc, dlg.FileName);}
+            if (result == true) { WriteXPS(mainDoc, dlg.FileName); }
         }
 
         private void GenerateDigitWords_Click(object sender, RoutedEventArgs e)
         {
-            ToWord toWord = new ToWord(Convert.ToDecimal((int)presc.Total), new CurrencyInfo(CurrencyInfo.Currencies.Algeria));
+            ToWord toWord = new ToWord(Convert.ToDecimal((int)order.Total), new CurrencyInfo(CurrencyInfo.Currencies.Algeria));
 
             string arabicPrefix = "أوقفت هذه الفاتورة بمبلغ مع جميع الرسوم";
             string arabic = toWord.ConvertToArabic();
@@ -360,8 +368,8 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
 
         private void DateCB_Checked(object sender, RoutedEventArgs e)
         {
-            if (HeadTable == null) { return; }
-            try { CreatHeadTable(); displayDoc(mainDoc);}
+            if (TitleTable == null) { return; }
+            try { CreatTitleTable(); displayDoc(mainDoc); }
             catch { }
         }
 
@@ -376,20 +384,6 @@ namespace WPF_N_Tier_Test.Common.UI.Workspaces
         {
             if (PartiesTable == null) { return; }
             try { ParseParties(); displayDoc(mainDoc); }
-            catch { }
-        }
-
-        private void AgeCB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (TitleTable == null) { return; }
-            try { CreatTitleTable(); displayDoc(mainDoc); }
-            catch { }
-        }
-
-        private void GenderCBCB_Checked(object sender, RoutedEventArgs e)
-        {
-            if (TitleTable == null) { return; }
-            try { CreatTitleTable(); displayDoc(mainDoc); }
             catch { }
         }
     }
