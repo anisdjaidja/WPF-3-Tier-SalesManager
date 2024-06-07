@@ -12,7 +12,7 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.Customers
         public Order? SelectedOrder => Parent.SelectedOrder;
         public int OID => (SelectedOrder?.ID) ?? -1;
         public string? OrderID => (SelectedOrder?.TransactionID) ?? "Unknown";
-        public int CustomerID => (Parent.SelectedPerson as Customer)?.Id ?? -1;
+        public int CustomerID => Parent?.SelectedOrder.CustomerId ?? -1;
         public double? Total => SelectedOrder?.Total;
         public ObservableCollection<ProductBatch>? curretProductBatches => SelectedOrder?.TransactedEntities;
         public bool IsOrderEligibleToPay => !SelectedOrder?.IsPaid ?? false && (!SelectedOrder?.IsPaid ?? false);

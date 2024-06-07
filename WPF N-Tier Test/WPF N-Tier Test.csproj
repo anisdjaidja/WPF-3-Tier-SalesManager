@@ -133,6 +133,7 @@
     <None Remove="Assets\Tools\shop.png" />
     <None Remove="Assets\Tools\SpaceBar.png" />
     <None Remove="Assets\Tools\Staff.png" />
+    <None Remove="Assets\Tools\star.png" />
     <None Remove="Assets\Tools\subSection.png" />
     <None Remove="Assets\Tools\supplyRecord.png" />
     <None Remove="Assets\Tools\table.png" />
@@ -356,6 +357,7 @@
     <Resource Include="Assets\Tools\shop.png" />
     <Resource Include="Assets\Tools\SpaceBar.png" />
     <Resource Include="Assets\Tools\Staff.png" />
+    <Resource Include="Assets\Tools\star.png" />
     <Resource Include="Assets\Tools\subSection.png" />
     <Resource Include="Assets\Tools\supplyRecord.png" />
     <Resource Include="Assets\Tools\table.png" />

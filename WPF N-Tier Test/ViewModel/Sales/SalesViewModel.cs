@@ -9,36 +9,40 @@ using WPF_N_Tier_Test.ViewModel.Sales.POS;
 
 namespace WPF_N_Tier_Test.ViewModel.Sales
 {
-    public partial class SalesViewModel: BaseModel
+    public partial class SalesViewModel: BaseModel, INavigationViewModel
     {
         private readonly StockService stockService;
         private readonly CustomerService customersService;
+        public readonly SalesService salesService;
         public List<UIElement> Pages;
         [ObservableProperty] public UIElement? currentPage;
 
         public CustomersViewModel CustomersVM;
         private PointOfSaleViewModel PointOfSaleVM;
 
-        public SalesViewModel(StockService stockservice, CustomerService customersService)
+        
+
+        public SalesViewModel(StockService stockservice, CustomerService customersService, SalesService salesService)
         {
             this.stockService = stockservice;
             this.customersService = customersService;
+            this.salesService = salesService;
             ResolveViewModels();
             ResolvePages();
         }
         void ResolveViewModels()
         {
-            CustomersVM = new CustomersViewModel(customersService, stockService);
-            PointOfSaleVM = new PointOfSaleViewModel(stockService, customersService);
+            CustomersVM = new CustomersViewModel(customersService, stockService, salesService);
+            PointOfSaleVM = new PointOfSaleViewModel(stockService, customersService, salesService);
         }
         void ResolvePages()
         {
             Pages = new()
             {
-                null,
-                null,
                 new CustomersPage(CustomersVM),
                 new PointOfSaleView(PointOfSaleVM),
+                null,
+                null,
                 null,
             };
             SwitchPage(0);
@@ -47,7 +51,16 @@ namespace WPF_N_Tier_Test.ViewModel.Sales
         [RelayCommand]
         public void SwitchPage(object PageIDX)
         {
-            CurrentPage = Pages[int.Parse(PageIDX.ToString())];
+            NavigateTo(int.Parse(PageIDX.ToString()));
+        }
+        public void NavigateTo(int pageIndex)
+        {
+            CurrentPage = Pages[pageIndex];
+        }
+
+        public void NavigateToTab(int idx, int tabIdx)
+        {
+            throw new NotImplementedException();
         }
     }
 }

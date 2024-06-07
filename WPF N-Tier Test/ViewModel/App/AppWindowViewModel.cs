@@ -9,7 +9,7 @@ using WPF_N_Tier_Test_Data_Access.DataAccess;
 
 namespace WPF_N_Tier_Test.ViewModel.App
 {
-    public partial class AppWindowViewModel: BaseModel
+    public partial class AppWindowViewModel: BaseModel, INavigationViewModel
     {
         #region Fields
         public List<UIElement>? WorkSpaces;
@@ -25,6 +25,7 @@ namespace WPF_N_Tier_Test.ViewModel.App
         #region Services
         CustomerService clientsService;
         StockService stockService;
+        SalesService salesService;
 
         public SalesDesignTimeContextFactory factory { get; }
 
@@ -61,15 +62,16 @@ namespace WPF_N_Tier_Test.ViewModel.App
             //var app = Application.Current as WPF_N_Tier_Test.App;
             clientsService = new(factory);
             stockService = new(factory);
+            salesService = new(factory);
             //supplyService = new(DBclient);
             //memberService = new(DBclient);
             //subscriptionPlansService = new(DBclient!.GetDatabase(app._AppConfig.DbName));
         }
         void ResolveViewModels()
         {
-            salesViewModel = new(stockService, clientsService);
+            salesViewModel = new(stockService, clientsService, salesService);
             NavigationSideBarVM = new ();
-            NavigationSideBarVM.PageChanged += (e) => Navigate(e);
+            NavigationSideBarVM.PageChanged += (e) => NavigateTo(e);
             SearchBarVM = new(clientsService, this);
         }
         void ResolveWorkspaces()
@@ -78,22 +80,29 @@ namespace WPF_N_Tier_Test.ViewModel.App
             {
                 new SalesView(salesViewModel),
             };
-            Navigate(0);
+            NavigateTo(0);
         }
-        public void Navigate(int workspaceIDX)
+        public void NavigateTo(int pageIndex)
         {
-            CurrentWorkspace = WorkSpaces?[workspaceIDX];
+            CurrentWorkspace = WorkSpaces?[pageIndex];
         }
-
+        public void NavigateToTab(int idx, int tabIdx)
+        {
+            CurrentWorkspace = WorkSpaces?[idx];
+            if(CurrentWorkspace is INavigationViewModel)
+                (CurrentWorkspace as INavigationViewModel)!.NavigateTo(tabIdx);
+        }
         internal void CallBackDropDown()
         {
             SearchDropdownInvoked.Invoke();
         }
         public void GotoPatient(int id)
         {
-            Navigate(1);
-            salesViewModel.CustomersVM.GotoPatient(id);
+            //Navigate(1);
+            //salesViewModel.CustomersVM.GotoPatient(id);
             
         }
+
+        
     }
 }

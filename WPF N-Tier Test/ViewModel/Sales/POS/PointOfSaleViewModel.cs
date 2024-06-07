@@ -17,6 +17,8 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
 
         }
         private StockService stockService;
+        private CustomerService customerService;
+        public SalesService salesService;
         [ObservableProperty]
         public ObservableCollection<Article> currentStock = new();
 
@@ -29,9 +31,11 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         [ObservableProperty]
         public CreateBatchViewModel? createBatchVM;
 
-        public PointOfSaleViewModel(StockService stockservice, CustomerService customersService)
+        public PointOfSaleViewModel(StockService stockservice, CustomerService customersService, SalesService salesService)
         {
             this.stockService = stockservice;
+            this.salesService = salesService;
+            this.customerService = customersService;
             CartVM = new PointOfSaleCartViewModel(this, customersService);
             LoadStock();
             OnPropertyChanged(nameof(CurrentStock));
@@ -97,6 +101,11 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         public void OnProductBatchRemoved(int id)
         {
             throw new NotImplementedException();
+        }
+
+        internal void ResetSale()
+        {
+            CartVM = new(this, customerService: customerService);
         }
     }
 }

@@ -12,8 +12,8 @@ using WPF_N_Tier_Test_Data_Access.DataAccess;
 namespace WPF_N_Tier_Test_Data_Access.Migrations
 {
     [DbContext(typeof(SalesContext))]
-    [Migration("20240605031737_AddedProductToBatch")]
-    partial class AddedProductToBatch
+    [Migration("20240606213001_creation")]
+    partial class creation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,22 +122,22 @@ namespace WPF_N_Tier_Test_Data_Access.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ShipmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ValidationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<double>("discount")
                         .HasColumnType("float");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -158,6 +158,7 @@ namespace WPF_N_Tier_Test_Data_Access.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -196,6 +197,7 @@ namespace WPF_N_Tier_Test_Data_Access.Migrations
             modelBuilder.Entity("WPF_N_Tier_Test_Data_Access.DTOs.User", b =>
                 {
                     b.Property<string>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
@@ -209,6 +211,17 @@ namespace WPF_N_Tier_Test_Data_Access.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("WPF_N_Tier_Test_Data_Access.DTOs.Transaction<WPF_N_Tier_Test_Data_Access.DTOs.TransactionBatch>", b =>
+                {
+                    b.HasOne("WPF_N_Tier_Test_Data_Access.DTOs.Person", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WPF_N_Tier_Test_Data_Access.DTOs.TransactionBatch", b =>

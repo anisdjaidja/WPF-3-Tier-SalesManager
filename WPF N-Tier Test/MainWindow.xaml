@@ -85,10 +85,7 @@
         <Border Grid.ColumnSpan="2" Background="{DynamicResource MainContrast}">
           <Border BorderThickness="0">
             <Border.Background>
-              <ImageBrush
-          
-                Opacity="0.7"
-                Stretch="UniformToFill" />
+              <ImageBrush Opacity="0.7" Stretch="UniformToFill" />
             </Border.Background>
           </Border>
         </Border>
@@ -103,26 +100,24 @@
           FontWeight="Normal"
           Foreground="White"
           WindowChrome.IsHitTestVisibleInChrome="True">
-          <Run Text="Docteur" />
+          <Run Text="Sales manager" />
           <Run
             BaselineAlignment="Center"
             FontSize="12"
             FontWeight="Light"
-            Text=" |  Doudou" />
+            Text=" |  test project" />
         </TextBlock>
-
         <Grid
           x:Name="workspace_top_panel"
           Grid.Column="1"
           Margin="200,0,200,0"
           Visibility="Visible"
           WindowChrome.IsHitTestVisibleInChrome="True">
-          <app:SearchBarView
-            x:Name="SearchBarV"
-            MinWidth="450"
-            Margin="20,0"
+          <ListView
+            Height="35"
+            MinWidth="200"
             HorizontalAlignment="Left"
-            DataContext="{Binding SearchBarVM}" />
+            ItemsSource="{Binding Favorites}" />
         </Grid>
         <app:LoadingOverlayView
           x:Name="LoadingOverlay"
@@ -146,17 +141,7 @@
           d:IsLocked="True"
           Orientation="Horizontal"
           WindowChrome.IsHitTestVisibleInChrome="True">
-          <ComboBox
-            x:Name="LangBox"
-            Width="80"
-            Margin="0,9"
-            Padding="5,0"
-            FontSize="12"
-            Style="{StaticResource ComboBoxEx}">
-            <ComboBoxItem Content="English" Selected="LanguageSwitched" />
-            <ComboBoxItem Content="Francais" Selected="LanguageSwitched" />
-            <ComboBoxItem Content="العربية" Selected="LanguageSwitched" />
-          </ComboBox>
+
 
 
           <Border Background="#4C2B2B2B">

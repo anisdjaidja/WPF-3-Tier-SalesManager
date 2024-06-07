@@ -16,82 +16,51 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
     {
         public CustomerService customersService;
         public StockService stockService;
+        public SalesService salesService;
 
-        public CustomersViewModel(CustomerService customersService, StockService stockService)
+
+        public CustomersViewModel(CustomerService customersService, StockService stockService, SalesService salesService)
         {
             Title = "Patient";
             this.customersService = customersService;
             this.stockService = stockService;
-            LoadAllCustomers();
-  
+            this.salesService = salesService;
+            LoadSales();
         }
-        public async void LoadAllCustomers()
+
+        public async void LoadSales()
         {
             IsBusy = true;
-            var cs = await customersService.GetAllCustomers();
-            Customers = new ObservableCollection<Customer>(cs);
-            OnPropertyChanged(nameof(Customers));
+            var cs = await salesService.GetAllOrders();
+            CurrentOrders = new (cs);
+            OnPropertyChanged(nameof(CurrentOrders));
             IsBusy = false;
         }
-        #region Customers
-        [ObservableProperty]
-        public ObservableCollection<Customer>? customers;
-
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsCustomerSelected),
-            nameof(CurrentOrders),
-            nameof(IsOrderTableVisible), 
-            nameof(SelectedPerson),
-            nameof(CustomerName))]
-        public Customer? selectedCustomer;
-
-        public Customer? SelectedPerson => SelectedCustomer;
-        public string? PersonDecoratorName { get; set; } = "Customer";
-        public string? CustomerName => SelectedCustomer?.Name;
-        public bool IsCustomerSelected => SelectedCustomer != null;
-        public Visibility IsOrderTableVisible => IsCustomerSelected ? Visibility.Visible : Visibility.Collapsed;
-
-        #endregion
 
         #region Orders
-        public ObservableCollection<Order>? CurrentOrders => SelectedCustomer?.Orders;
+        [ObservableProperty]
+        public ObservableCollection<Order>? currentOrders;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsOrderSelected),
-            nameof(IsEligibleToBill)
-            )]
+        [NotifyPropertyChangedFor(nameof(IsOrderSelected), nameof(CustomerName))]
         public Order? selectedOrder;
         public bool IsOrderSelected => SelectedOrder != null;
-        public bool IsEligibleToBill => (SelectedOrder?.IsPaid )?? false;
+        public string? CustomerName => SelectedOrder?.Customer?.Name;
+        public Visibility IsOrderTableVisible => CurrentOrders?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
 
         public OrderDetailsViewModel? OrderDetailsVM { get; private set; }
-        [ObservableProperty]
-        public CreateOrderViewModel? createOrderVM;
-        [ObservableProperty]
-        public UserControl? createOrderV;
         #endregion
 
         public event Action OrderDetailsRequested;
-        public event Action OrderDetailsClosed; 
-
-        public void GotoPatient(int PatientID)
-        {
-            SelectedCustomer = Customers.Where(x => x.Id == PatientID).FirstOrDefault();
-        }
+        public event Action OrderDetailsClosed;
 
         private void Facturate(FactureType type)
         {
-            FacturationSpace facturation = new FacturationSpace(SelectedOrder, SelectedCustomer);
-            string title = Current.FindResource("Prescription") + " " + SelectedOrder.TransactionID + " - " + Current.FindResource("Patient") + ": " + SelectedCustomer.Name;
-            ChildWindow box = new ChildWindow(facturation, title);
-            box.Show();
-        }
-
-        [RelayCommand]
-        public void PrintOrderProforma()
-        {
-            Facturate(FactureType.Proforma);
+            //FacturationSpace facturation = new FacturationSpace(SelectedOrder);
+            //string title = Current.FindResource("Prescription") + " " + SelectedOrder.TransactionID + " - " + Current.FindResource("Patient") + ": " + SelectedCustomer.Name;
+            //ChildWindow box = new ChildWindow(facturation, title);
+            //box.Show();
         }
         [RelayCommand]
         public void PrintOrderReceipt()
@@ -111,7 +80,6 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
         public void OnOrderModificationCommited(bool StatusSignal = true)
         {
             if (!StatusSignal) { OrderDetailsClosed?.Invoke(); }
-            CollectionViewSource.GetDefaultView(Customers).Refresh();
             CollectionViewSource.GetDefaultView(CurrentOrders).Refresh();
         }
     }

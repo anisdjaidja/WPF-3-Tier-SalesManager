@@ -40,12 +40,37 @@
         Margin="5,10"
         Padding="5,0"
         HorizontalAlignment="Stretch"
+        Content="{DynamicResource Customers}"
+        IsChecked="True"
+        Style="{StaticResource TabBtnTheme}">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="0" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+      </RadioButton>
+      <RadioButton
+        Margin="5,10"
+        Padding="10,0"
+        HorizontalAlignment="Stretch"
+        Content="{DynamicResource Point of Sale}"
+        Style="{StaticResource TabBtnTheme}">
+        <i:Interaction.Triggers>
+          <i:EventTrigger EventName="Checked">
+            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="1" />
+          </i:EventTrigger>
+        </i:Interaction.Triggers>
+      </RadioButton>
+      <RadioButton
+        Margin="5,10"
+        Padding="5,0"
+        HorizontalAlignment="Stretch"
         Content="{DynamicResource Members}"
         IsEnabled="False"
         Style="{StaticResource TabBtnTheme}">
         <i:Interaction.Triggers>
           <i:EventTrigger EventName="Checked">
-            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="0" />
+            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="2" />
           </i:EventTrigger>
         </i:Interaction.Triggers>
       </RadioButton>
@@ -58,35 +83,11 @@
         Style="{StaticResource TabBtnTheme}">
         <i:Interaction.Triggers>
           <i:EventTrigger EventName="Checked">
-            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="1" />
-          </i:EventTrigger>
-        </i:Interaction.Triggers>
-      </RadioButton>
-      <RadioButton
-        Margin="5,10"
-        Padding="5,0"
-        HorizontalAlignment="Stretch"
-        Content="{DynamicResource Customers}"
-        IsChecked="True"
-        Style="{StaticResource TabBtnTheme}">
-        <i:Interaction.Triggers>
-          <i:EventTrigger EventName="Checked">
-            <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="2" />
-          </i:EventTrigger>
-        </i:Interaction.Triggers>
-      </RadioButton>
-      <RadioButton
-        Margin="5,10"
-        Padding="10,0"
-        HorizontalAlignment="Stretch"
-        Content="{DynamicResource Point of Sale}"
-        Style="{StaticResource TabBtnTheme}">
-        <i:Interaction.Triggers>
-          <i:EventTrigger EventName="Checked">
             <i:InvokeCommandAction Command="{Binding SwitchPageCommand}" CommandParameter="3" />
           </i:EventTrigger>
         </i:Interaction.Triggers>
       </RadioButton>
+
       <RadioButton
         Margin="5,10"
         Padding="10,0"

@@ -8,8 +8,10 @@ namespace WPF_N_Tier_Test_Data_Access.DTOs
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
         [Required]
+        [ForeignKey(nameof(ProductId))]
         public Product Article { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public int Category { get; set; } = 0;

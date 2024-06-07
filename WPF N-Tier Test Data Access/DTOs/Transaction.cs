@@ -11,7 +11,10 @@ namespace WPF_N_Tier_Test_Data_Access.DTOs
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CustomerId { get; set; }
         [Required]
+        [ForeignKey(nameof(CustomerId))]
         public Person Customer { get; set; }
         public DateTime DateTime { get; set; }
         public bool paid = false;

@@ -52,7 +52,7 @@
           DisplayMemberPath="Name"
           IsTextSearchEnabled="True"
           ItemsSource="{Binding Path=CustomerList}"
-          SelectedItem="{Binding Path=SelectedCustomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding Path=NewOrder.Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
           Style="{StaticResource ComboBoxEx}"
           TextSearch.TextPath="Name" />
 
@@ -217,6 +217,7 @@
           Height="45"
           Padding="10,0"
           HorizontalAlignment="Stretch"
+          Command="{Binding CheckoutOrderCommand}"
           IsEnabled="True"
           Style="{StaticResource Btn_Theme2}"
           ToolTip="Confirm Sale">
@@ -324,6 +325,21 @@
                 Value="{Binding Path=SelectedItem, ElementName=SaleBucketTable}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
+          <DataGrid.Columns>
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+            <DataGridTemplateColumn Visibility="Hidden" />
+          </DataGrid.Columns>
         </DataGrid>
       </Border>
     </Grid>

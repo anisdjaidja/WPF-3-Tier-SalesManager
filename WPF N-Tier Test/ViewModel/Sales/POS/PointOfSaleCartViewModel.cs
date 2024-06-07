@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Net.Sockets;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
@@ -9,7 +10,6 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
     public partial class PointOfSaleCartViewModel : BaseModel, IArticleSelector
     {
         private CustomerService customerService;
-
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(Total), nameof(SubTotal), nameof(Bucket))]
         public Order newOrder;
@@ -33,9 +33,11 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
             Parent = parent;
             this.customerService = customerService;
             CustomerList = new(customerService.GetAllCustomers().Result.ToList());
-            NewOrder = new() { Customer = null };
-            NewOrder.TransactionFeaturesChanged += (o,s) => NewOrder_TransactionFeaturesChanged();
+            NewOrder = new();
+            NewOrder.TransactionFeaturesChanged += (o, s) => NewOrder_TransactionFeaturesChanged();
+            
         }
+
 
         private void NewOrder_TransactionFeaturesChanged()
         {
@@ -52,6 +54,9 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
                 Parent.EditProductBatch(value);
             }
         }
+
+        public PointOfSaleViewModel PointOfSaleViewModel { get; }
+        public CustomerService CustomersService { get; }
 
         public void OnProductBatchCreated(ProductBatch? pb)
         {
@@ -77,6 +82,17 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         {
             NewOrder.TransactedEntities.Remove(NewOrder.TransactedEntities.Where(x => x.ProductId == id).FirstOrDefault());
             NewOrder_TransactionFeaturesChanged();
+        }
+        [RelayCommand]
+        public async Task CheckoutOrder()
+        {
+            var result = await Parent.salesService.INSERT_Order(NewOrder);
+            if (result)
+            {
+                ReportSuccess("Order created !");
+                Parent.ResetSale();
+            }
+                
         }
     }
 }
