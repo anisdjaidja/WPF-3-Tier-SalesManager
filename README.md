@@ -15,5 +15,10 @@ The proposed design in this application is a 3 tier infused with MVVM, see bello
 - .net core 6, 7, 8
 - SQL server version 2019
 
+## Important notes
+
+- We are supposed to gitignore the datacontex factory located in the Data accesss layer but for demonstration purposes it is included in the repo.
+- We are supposed to move password handeling logic to the Data access layer or to the Logic layer, we chose to move it to Logic layer for demonstration purposes.
+
 ## Author : Anis Djaidja, IT, Software Engineer
 ## Disclaimer : this project is for a test in mformatik company, not developed with production in mind
