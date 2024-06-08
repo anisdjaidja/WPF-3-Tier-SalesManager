@@ -31,7 +31,7 @@ namespace WPF_N_Tier_Test.ViewModel.App
             await Task.Delay(1000);
             var result = await userService.Login(UserName, Password);
             IsBusy = false;
-            if (!result)
+            if (result)
             {
                 OverlayingApp = Visibility.Hidden;
                 OnPropertyChanged(nameof(OverlayingApp));
