@@ -52,7 +52,7 @@
           DisplayMemberPath="Name"
           IsTextSearchEnabled="True"
           ItemsSource="{Binding Path=CustomerList}"
-          SelectedItem="{Binding Path=NewOrder.Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding Path=SelectedCustomer, UpdateSourceTrigger=PropertyChanged}"
           Style="{StaticResource ComboBoxEx}"
           TextSearch.TextPath="Name" />
 
@@ -218,7 +218,7 @@
           Padding="10,0"
           HorizontalAlignment="Stretch"
           Command="{Binding CheckoutOrderCommand}"
-          IsEnabled="True"
+          IsEnabled="{Binding IsEligibleToCheckout, UpdateSourceTrigger=PropertyChanged}"
           Style="{StaticResource Btn_Theme2}"
           ToolTip="Confirm Sale">
           <Button.Content>

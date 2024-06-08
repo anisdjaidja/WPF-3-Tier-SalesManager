@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using System.Windows.Controls;
 using WPF_N_Tier_Test.Service;
 using WPF_N_Tier_Test.View.Register;
 using WPF_N_Tier_Test.View.Sales.Customers;
@@ -52,6 +53,7 @@ namespace WPF_N_Tier_Test.ViewModel.Sales
         public void SwitchPage(object PageIDX)
         {
             CurrentPage = Pages[int.Parse(PageIDX.ToString())];
+            CustomersVM.Refrech();
             OnPropertyChanged(nameof(CurrentPage));
         }
         public void NavigateTo(int pageIndex)

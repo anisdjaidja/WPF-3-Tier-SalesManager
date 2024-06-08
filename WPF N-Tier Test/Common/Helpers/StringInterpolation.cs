@@ -12,7 +12,7 @@ namespace WPF_N_Tier_Test.Modules.Helpers
         {
             const string separator = ", ";
 
-            if (ts.TotalSeconds < 1) { return "Now"; }
+            if (ts.TotalDays < 1) { return "Now"; }
 
             if (ts.TotalDays > 0)
                 return string.Join(separator, new string[]

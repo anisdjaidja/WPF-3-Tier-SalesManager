@@ -13,8 +13,9 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
     {
         public CustomersPage(CustomersViewModel VM)
         {
-            InitializeComponent();
             DataContext = VM;
+            InitializeComponent();
+            
 
             VM.OrderDetailsRequested += () => AnimationHelper.SlideFadePopup(OrderDetailsPopup, true, AnimationHelper.SlidDirection.Down);
             VM.OrderDetailsClosed += () => AnimationHelper.SlideFadePopup(OrderDetailsPopup, false, AnimationHelper.SlidDirection.Down);   
@@ -44,7 +45,6 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
                 "GrossMargin",
                 "Tax",
                 "ShipmentDate",
-                
                 "IsBiologicalTest"
             };
 
@@ -63,18 +63,29 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
             {
                 e.Column.DisplayIndex = 2;
                 e.Column.Header = FindResource("Date");
-            }
-            if (colHeader == "Amount")
-            {
-                e.Column.DisplayIndex = 4; e.Column.Header = "SubTotal";
-            }
-            if (colHeader == "Total")
-            {
-                e.Column.DisplayIndex = 5; e.Column.Header = "Total";
+                e.Column.Header = "SubTotal";
+
             }
             if (colHeader == "discount")
             {
                 e.Column.DisplayIndex = 3; e.Column.Header = "Discount";
+                e.Column.CellStyle = (Style)FindResource("QuantityCell");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N0}%"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (colHeader == "Amount")
+            {
+                e.Column.DisplayIndex = 4; e.Column.Header = "SubTotal"; 
+                e.Column.CellStyle = (Style)FindResource("QuantityCell");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (colHeader == "Total")
+            {
+                e.Column.DisplayIndex = 5; e.Column.Header = "Total";
+                e.Column.CellStyle = (Style)FindResource("QuantityCell");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
             }
             if (colHeader == "State")
             {

@@ -15,38 +15,68 @@ namespace WPF_N_Tier_Test.View.Sales.Customers
         private void SaleBucketTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
 
-            //...
-            string colHeader = e.Column.Header.ToString();
-            List<string> toCancel = new List<string>
+            if (e.Column.Header.ToString() == "ProductId") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "TotalCost") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Model") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Category") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "UnitCost") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "UnitMetric") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "UnitPrice") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Article") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Quantity") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "discount") { e.Cancel = true; }
+            if (e.Column.Header.ToString() == "Id") { e.Cancel = true; }
+
+            if (e.Column.Header.ToString() == "ProductName")
             {
-                "Description",
-                "BasePrice",
-                "MarginPrice",
-                "Category",
-                "ProductId",
-                "FormatedQuantity",
-                "QuantityCap",
-                "isTaxed",
-                "TaxRate",
-                "MarginPrice",
-                "SalePrice",
-                "TotalCost",
-                "Model",
-                "Manufacturer",
-                "Quantity",
-                "UnitMetric",
-                "UnitCost",
-                "UnitPrice",
-                "TotalPrice",
-            };
+                e.Column.DisplayIndex = 0;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.CellStyle = (Style)FindResource("NameCellAlt");
+                e.Column.Header = "Product";
+            }
+            if (e.Column.Header.ToString() == "FormatedQuantity")
+            {
+                e.Column.DisplayIndex = 2;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Quantity";
+            }
+            if (e.Column.Header.ToString() == "UnitPrice")
+            {
+                e.Column.DisplayIndex = 1;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Unit Price";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "Discount")
+            {
+                e.Column.DisplayIndex = 3;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Discount";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N0}%"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "TotalPrice")
+            {
+                e.Column.DisplayIndex = 4;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Subtotal";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "NetTotal")
+            {
+                e.Column.DisplayIndex = 5;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Total";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
 
-
-            if (toCancel.Where(x => x == colHeader).FirstOrDefault() != null) { e.Cancel = true; }
-
-            if (colHeader == "ProductName") { e.Column.CellStyle = (Style)FindResource("NameCellAlt"); e.Column.Header = FindResource("Medicine"); }
-            if (colHeader == "Duration") { e.Column.Header = FindResource("days"); (e.Column as DataGridTextColumn).Binding.StringFormat = "dd"; }
-            if (colHeader == "MedUnit") e.Column.Header = FindResource("Type");
-            if (colHeader == "DurationDesc") e.Column.Header = FindResource("days optional");
 
 
         }

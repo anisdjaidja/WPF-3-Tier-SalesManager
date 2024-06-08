@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Net.Sockets;
 using WPF_N_Tier_Test.Model;
 using WPF_N_Tier_Test.Service;
-using WPF_N_Tier_Test.ViewModel.Sales.Customers;
 
 namespace WPF_N_Tier_Test.ViewModel.Sales.POS
 {
@@ -11,15 +9,25 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
     {
         private CustomerService customerService;
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(Total), nameof(SubTotal), nameof(Bucket))]
+        [NotifyPropertyChangedFor(nameof(Total), nameof(SubTotal), nameof(Bucket), nameof(IsCustomerSelected), nameof(IsEligibleToCheckout))]
         public Order newOrder;
         public double SubTotal => NewOrder.Amount;
         public double Total => NewOrder.Total;
         public ObservableCollection<ProductBatch>? Bucket => NewOrder?.TransactedEntities;
+
         [ObservableProperty]
         public ObservableCollection<Customer>? customerList;
-        [ObservableProperty]
-        public Customer? selectedCustomer;
+        public Customer? SelectedCustomer
+        {
+            set
+            {
+                NewOrder.Customer = value;
+                OnPropertyChanged(nameof(IsCustomerSelected));
+                OnPropertyChanged(nameof(IsEligibleToCheckout));
+            }
+        }
+        public bool IsCustomerSelected => NewOrder.Customer != null;
+        public bool IsEligibleToCheckout => IsCustomerSelected && (Bucket.Count >= 1);
 
         [ObservableProperty]
         public Article selectedProduct;
@@ -38,12 +46,14 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
             
         }
 
-
+        [RelayCommand]
         private void NewOrder_TransactionFeaturesChanged()
         {
             OnPropertyChanged(nameof(NewOrder));
             OnPropertyChanged(nameof(SubTotal));
             OnPropertyChanged(nameof(Total));
+            OnPropertyChanged(nameof(IsEligibleToCheckout));
+
         }
 
         public ProductBatch? SelectedBatch
@@ -82,10 +92,16 @@ namespace WPF_N_Tier_Test.ViewModel.Sales.POS
         {
             NewOrder.TransactedEntities.Remove(NewOrder.TransactedEntities.Where(x => x.ProductId == id).FirstOrDefault());
             NewOrder_TransactionFeaturesChanged();
+
         }
         [RelayCommand]
         public async Task CheckoutOrder()
         {
+            if (!IsCustomerSelected)
+            {
+                ReportError("Please select a customer for the order");
+                return;
+            }
             var result = await Parent.salesService.INSERT_Order(NewOrder);
             if (result)
             {

@@ -92,7 +92,7 @@
         <ComboBox
           x:Name="groupingbox"
           Width="100"
-          Height="35"
+          Height="30"
           SelectedValue="{Binding Groupbykey}"
           Style="{StaticResource ComboBoxEx}">
           <i:Interaction.Triggers>
@@ -104,6 +104,7 @@
             </i:EventTrigger>
           </i:Interaction.Triggers>
           <Sys:String>State</Sys:String>
+          <Sys:String>Since</Sys:String>
           <Sys:String>None</Sys:String>
         </ComboBox>
         <TextBlock
@@ -114,14 +115,21 @@
           Text="Filter By:"
           Visibility="{Binding IsOrderTableVisible}" />
         <ComboBox
+          x:Name="Filteringbox"
           Width="100"
-          Height="35"
+          Height="30"
           Style="{StaticResource ComboBoxEx}">
-
-          <ComboBoxItem Content="CustumerId" />
-          <ComboBoxItem Content="State" />
-
-
+          <Sys:String>Today</Sys:String>
+          <Sys:String>This week</Sys:String>
+          <Sys:String>None</Sys:String>
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SelectionChanged">
+              <i:ChangePropertyAction
+                PropertyName="Filterbykey"
+                TargetObject="{Binding Mode=Default, UpdateSourceTrigger=PropertyChanged}"
+                Value="{Binding Path=SelectedItem, ElementName=Filteringbox}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
         </ComboBox>
       </StackPanel>
       <StackPanel
@@ -264,6 +272,26 @@
             </GroupStyle.ContainerStyle>
           </GroupStyle>
         </DataGrid.GroupStyle>
+        <DataGrid.Columns>
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+          <DataGridTextColumn Visibility="Hidden" />
+        </DataGrid.Columns>
       </DataGrid>
 
     </Grid>
@@ -326,7 +354,7 @@
           Margin="5,0"
           Padding="7,0"
           Command="{Binding NewOrderCommand}"
-          IsEnabled="{Binding IsCustomerSelected}"
+          IsEnabled="False"
           Style="{StaticResource Btn_Theme2}">
           <Button.Content>
             <Grid>
@@ -354,7 +382,7 @@
           Margin="5,0"
           Padding="10,0"
           Command="{Binding RequestEditPersonCommand}"
-          IsEnabled="{Binding IsCustomerSelected}"
+          IsEnabled="False"
           Style="{StaticResource ActionBtn}">
           <Button.Content>
             <Grid>
@@ -380,7 +408,7 @@
           Margin="5,0"
           Padding="7,0"
           Command="{Binding DeleteCustomerCommand}"
-          IsEnabled="{Binding IsCustomerSelected}"
+          IsEnabled="False"
           Style="{StaticResource ActionBtn}">
           <Button.Content>
             <Grid>

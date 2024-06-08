@@ -33,7 +33,6 @@ namespace WPF_N_Tier_Test.View.Sales.POS
             if (e.Column.Header.ToString() == "Article") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "Quantity") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "discount") { e.Cancel = true; }
-            if (e.Column.Header.ToString() == "TotalPrice") { e.Cancel = true; }
             if (e.Column.Header.ToString() == "Id") { e.Cancel = true; }
 
             if (e.Column.Header.ToString() == "ProductName")
@@ -45,13 +44,13 @@ namespace WPF_N_Tier_Test.View.Sales.POS
             }
             if (e.Column.Header.ToString() == "FormatedQuantity")
             {
-                e.Column.DisplayIndex = 2;
+                e.Column.DisplayIndex = 1;
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
                 e.Column.Header = "Quantity";
             }
-            if (e.Column.Header.ToString() == "UnitPrice")
+            if (e.Column.Header.ToString() == "SalePrice")
             {
-                e.Column.DisplayIndex = 1;
+                e.Column.DisplayIndex = 2;
                 e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
                 e.Column.Header = "Unit Price";
                 e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
@@ -67,10 +66,19 @@ namespace WPF_N_Tier_Test.View.Sales.POS
                 DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
                 if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N0}%"; dataGridTextColumn.Binding.FallbackValue = 0; }
             }
-            if (e.Column.Header.ToString() == "NetTotal")
+            if (e.Column.Header.ToString() == "TotalPrice")
             {
                 e.Column.DisplayIndex = 4;
-                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+                e.Column.Header = "Subtotal";
+                e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
+                DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;
+                if (dataGridTextColumn != null) { dataGridTextColumn.Binding.StringFormat = "{0 :N2}"; dataGridTextColumn.Binding.FallbackValue = 0; }
+            }
+            if (e.Column.Header.ToString() == "NetTotal")
+            {
+                e.Column.DisplayIndex = 5;
+                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
                 e.Column.Header = "Total";
                 e.Column.CellStyle = (Style)FindResource("QuantityCellAlt");
                 DataGridTextColumn? dataGridTextColumn = e.Column as DataGridTextColumn;

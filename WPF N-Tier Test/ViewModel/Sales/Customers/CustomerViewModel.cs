@@ -32,9 +32,23 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
             IsBusy = true;
             var cs = await salesService.GetAllOrders();
             CurrentOrders = new (cs);
-            CurrentViewSource = CollectionViewSource.GetDefaultView(CurrentOrders);
-            OnPropertyChanged(nameof(CurrentViewSource));
+            OnPropertyChanged(nameof(CurrentOrders));
             IsBusy = false;
+        }
+        public string? Filterbykey
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    ReportSuccess("Filtering");
+                    Filterby(value);
+                }
+            }
         }
         public string? Groupbykey
         {
@@ -59,11 +73,29 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
                 CurrentViewSource.GroupDescriptions.Add(new PropertyGroupDescription(key));
             OnPropertyChanged(nameof(CurrentViewSource));
         }
+        [RelayCommand]
+        public async Task Filterby(string key)
+        {
+            switch (key)
+            {
+                case "Today": 
+                    CurrentViewSource.Filter = new Predicate<object>(x => ((Order)x).DateTime.Date == DateTime.Today.Date);
+                    break;
+                case "This week": 
+                    CurrentViewSource.Filter = new Predicate<object>(x => ((Order)x).DateTime.Date >= DateTime.Today.Date.AddDays(-7));
+                    break;
+                default:
+                    CurrentViewSource.Filter = null;
+                    break;
+            }
+            
+            OnPropertyChanged("ChildCollection");
+        }
         #region Orders
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CurrentViewSource))]
         public ObservableCollection<Order>? currentOrders;
-        [ObservableProperty]
-        public ICollectionView? currentViewSource;
+        public ICollectionView? CurrentViewSource => CollectionViewSource.GetDefaultView(CurrentOrders);
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsOrderSelected), nameof(CustomerName))]
         public Order? selectedOrder;
@@ -105,6 +137,11 @@ namespace WPF_N_Tier_Test.ViewModel.Customers
             if (!StatusSignal) { OrderDetailsClosed?.Invoke(); }
             LoadSales();
             CollectionViewSource.GetDefaultView(CurrentOrders).Refresh();
+        }
+
+        internal void Refrech()
+        {
+            LoadSales();
         }
     }
 }
