@@ -58,8 +58,7 @@ namespace WPF_N_Tier_Test.ViewModel.Sales
         }
         public void NavigateTo(int pageIndex)
         {
-            CurrentPage = Pages[pageIndex];
-            OnPropertyChanged(nameof(CurrentPage));
+            SwitchPage(pageIndex);
         }
 
         public void NavigateToTab(int idx, int tabIdx)

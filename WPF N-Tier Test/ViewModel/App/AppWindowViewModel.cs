@@ -87,6 +87,7 @@ namespace WPF_N_Tier_Test.ViewModel.App
             {
                 new SalesView(salesViewModel),
             };
+
             NavigateTo(0);
         }
         public void NavigateTo(int pageIndex)
@@ -95,10 +96,9 @@ namespace WPF_N_Tier_Test.ViewModel.App
         }
         public void NavigateToTab(int idx, int tabIdx)
         {
-            CurrentWorkspace = WorkSpaces?[idx];
+            NavigateTo(idx);
             OnPropertyChanged(nameof(CurrentWorkspace));
-            if (CurrentWorkspace is INavigationViewModel)
-                (CurrentWorkspace as INavigationViewModel)!.NavigateTo(tabIdx);
+            (salesViewModel).NavigateTo(tabIdx);
         }
         internal void CallBackDropDown()
         {
