@@ -28,4 +28,4 @@ The proposed design in this application is a 3 tier infused with MVVM, see bello
 - We are supposed to move password handeling logic to the Data access layer or to the Logic layer, we chose to move it to Logic layer for demonstration purposes.
 
 ## Author : Anis Djaidja, IT, Software Engineer
-## Disclaimer : this project is for a test in mformatik company, not developed with production in mind
+## Disclaimer : this project is not developed with production in mind
